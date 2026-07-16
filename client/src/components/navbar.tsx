@@ -21,7 +21,7 @@ export function Navbar() {
                     <img 
                         src={scrolled ? logo1 : logo2} 
                         alt="Nexion Solutions Logo" 
-                        className="h-12 w-auto object-contain transition-all duration-500" 
+                        className="h-20 md:h-24 w-auto object-contain transition-all duration-500" 
                     />
                 </a>
 

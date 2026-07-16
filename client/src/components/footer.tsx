@@ -10,7 +10,7 @@ export function Footer() {
                     {/* Left Brand Details */}
                     <div className="lg:col-span-7 flex flex-col items-start gap-6">
                         <a href="#" className="select-none">
-                            <img src={logo2} alt="Nexion Solutions Logo" className="h-16 w-auto object-contain" />
+                            <img src={logo2} alt="Nexion Solutions Logo" className="h-28 md:h-32 w-auto object-contain" />
                         </a>
                         <p className="text-zinc-300 text-sm/5.5 max-w-md">
                             Empowering businesses through cutting-edge technology, custom software, and robust digital solutions.
