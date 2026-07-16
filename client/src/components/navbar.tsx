@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import logo1 from "../assets/logo1.png";
+import logo2 from "../assets/logo2.png";
 
 export function Navbar() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -14,9 +16,13 @@ export function Navbar() {
 
     return (
         <>
-            <nav className={`fixed z-50 flex items-center justify-between left-1/2 -translate-x-1/2 transition-all duration-500 p-4 ${scrolled ? "lg:w-5xl w-[calc(100vw-14px)] bg-white/60 backdrop-blur-2xl rounded-full mt-4 pl-6 shadow" : "md:px-16 lg:px-24 xl:px-32 w-full"}`}>
-                <a href="https://prebuiltui.com">
-                    <img src="/logo.svg" alt="Logo" className={`transition-all duration-500 ${scrolled ? "invert opacity-80" : ""}`} />
+            <nav className={`fixed z-50 flex items-center justify-between left-1/2 -translate-x-1/2 transition-all duration-500 p-4 ${scrolled ? "lg:w-5xl w-[calc(100vw-14px)] bg-white/60 backdrop-blur-2xl rounded-full mt-4 pl-6 pr-6 shadow" : "md:px-16 lg:px-24 xl:px-32 w-full pt-6"}`}>
+                <a href="#" className="flex items-center">
+                    <img 
+                        src={scrolled ? logo1 : logo2} 
+                        alt="Nexion Solutions Logo" 
+                        className="h-12 w-auto object-contain transition-all duration-500" 
+                    />
                 </a>
 
                 {/* Desktop links */}

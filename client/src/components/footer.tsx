@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import logo2 from "../assets/logo2.png";
 
 export function Footer() {
     return (
@@ -9,10 +10,10 @@ export function Footer() {
                     {/* Left Brand Details */}
                     <div className="lg:col-span-7 flex flex-col items-start gap-6">
                         <a href="#" className="select-none">
-                            <img src="logo.svg" alt="estate" />
+                            <img src={logo2} alt="Nexion Solutions Logo" className="h-16 w-auto object-contain" />
                         </a>
                         <p className="text-zinc-300 text-sm/5.5 max-w-md">
-                            Helping buyers, seller and investors find the right property with confidence and expert guidance.
+                            Empowering businesses through cutting-edge technology, custom software, and robust digital solutions.
                         </p>
                     </div>
 
@@ -36,7 +37,7 @@ export function Footer() {
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    Properties
+                                    Services
                                 </motion.a>
                                 <motion.a href="#" className="hover:text-white transition-colors duration-200" 
                                     initial={{ y: 50, opacity: 0 }}
@@ -44,15 +45,7 @@ export function Footer() {
                                     viewport={{ once: true }}
                                     transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    Neighborhoods
-                                </motion.a>
-                                <motion.a href="#" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
-                                    whileInView={{ y: 0, opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
-                                >
-                                    Agents
+                                    Portfolio
                                 </motion.a>
                                 <motion.a href="#" className="hover:text-white transition-colors duration-200" 
                                     initial={{ y: 50, opacity: 0 }}
