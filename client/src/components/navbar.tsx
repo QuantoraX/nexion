@@ -73,23 +73,28 @@ export function Navbar() {
             </nav>
 
             {/* Mobile Menu Overlay */}
-            <div className={`${mobileOpen ? 'max-md:w-full' : 'max-md:w-0'} md:hidden max-md:fixed max-md:top-0 max-md:z-50 max-md:left-0 max-md:transition-all max-md:duration-300 max-md:overflow-hidden max-md:h-full max-md:bg-zinc-950/95 max-md:backdrop-blur max-md:flex-col max-md:justify-center flex items-center gap-6 text-sm`}>
-                {navLinks.map(link => (
-                    <Link
-                        key={link.to}
-                        to={link.to}
-                        onClick={() => setMobileOpen(false)}
-                        className="text-white hover:text-zinc-300 transition-colors"
-                    >
-                        {link.label}
-                    </Link>
-                ))}
-
-                <button onClick={() => setMobileOpen(false)} className="md:hidden bg-zinc-800 text-white p-2 rounded-md aspect-square font-medium transition cursor-pointer">
+            <div className={`fixed inset-0 z-50 bg-zinc-950/98 backdrop-blur flex flex-col items-center justify-center gap-8 md:hidden transition-all duration-300 ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <button 
+                    onClick={() => setMobileOpen(false)} 
+                    className="absolute top-6 right-6 text-white p-2.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+                >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                     </svg>
                 </button>
+
+                <div className="flex flex-col items-center gap-6">
+                    {navLinks.map(link => (
+                        <Link
+                            key={link.to}
+                            to={link.to}
+                            onClick={() => setMobileOpen(false)}
+                            className="text-white hover:text-zinc-300 transition-colors text-2xl font-medium tracking-wide"
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
             </div>
         </>
     );

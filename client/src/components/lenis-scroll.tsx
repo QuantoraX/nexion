@@ -6,11 +6,10 @@ export default function LenisScroll() {
         const lenis = new Lenis({
             duration: 1.2,
             smoothWheel: true,
-            smoothTouch: false,
             anchors: true,
         });
 
-        const raf = (time) => {
+        const raf = (time: number) => {
             lenis.raf(time);
             requestAnimationFrame(raf);
         };
