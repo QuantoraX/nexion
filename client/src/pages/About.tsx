@@ -9,7 +9,6 @@ import {
     values,
     milestones,
     capabilities,
-    aboutStats,
 } from "../data/about-data";
 
 /* ─── Animation variant ─────────────────────────────────────────── */

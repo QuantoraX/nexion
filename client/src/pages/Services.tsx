@@ -1,16 +1,17 @@
-import { motion, Variants } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { ArrowRight, ChevronRight, Zap } from "lucide-react";
-import { services, techStack, processSteps, benefits } from "../data/services-data";
+import { ArrowRight, ChevronRight, ChevronDown, Zap, Quote } from "lucide-react";
+import { services, techStack, processSteps, benefits, testimonials, faqs } from "../data/services-data";
 
 /* ─── Animation variant ─────────────────────────────────────────── */
-const fadeUp: Variants = {
+const fadeUp = {
     hidden: { y: 40, opacity: 0 },
     visible: (i = 0) => ({
         y: 0,
         opacity: 1,
-        transition: { delay: i * 0.1, type: "spring" as const, stiffness: 240, damping: 70 },
+        transition: { delay: i * 0.08, type: "spring" as const, stiffness: 240, damping: 70 },
     }),
 };
 
@@ -27,9 +28,57 @@ function SectionLabel({ text }: { text: string }) {
     );
 }
 
+/* ─── FAQ Accordion Item ─────────────────────────────────────────── */
+function FAQItem({ faq, index, open, onToggle }: {
+    faq: { q: string; a: string };
+    index: number;
+    open: boolean;
+    onToggle: () => void;
+}) {
+    return (
+        <motion.div
+            custom={index}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="border border-zinc-200 rounded-xl overflow-hidden bg-white"
+        >
+            <button
+                onClick={onToggle}
+                className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left group cursor-pointer hover:bg-zinc-50 transition-colors duration-200"
+                aria-expanded={open}
+            >
+                <span className="text-zinc-900 font-medium text-sm md:text-base leading-snug">{faq.q}</span>
+                <ChevronDown
+                    size={18}
+                    className={`text-zinc-400 shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+                />
+            </button>
+            <AnimatePresence initial={false}>
+                {open && (
+                    <motion.div
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                    >
+                        <p className="px-6 pb-5 text-zinc-500 text-sm leading-relaxed border-t border-zinc-100 pt-4">
+                            {faq.a}
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+}
+
 /* ─── Component ──────────────────────────────────────────────────── */
 export default function Services() {
     const navigate = useNavigate();
+    const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
     const handleCTA = () => {
         toast.success("Let's talk about your project!", {
@@ -39,10 +88,18 @@ export default function Services() {
         setTimeout(() => navigate("/"), 1200);
     };
 
+    const handleLearnMore = (serviceTitle: string) => {
+        toast(`Exploring: ${serviceTitle}`, {
+            style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" },
+            icon: "🚀",
+        });
+        setTimeout(() => navigate("/"), 1000);
+    };
+
     return (
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
-            {/* ══ 1. HERO ═══════════════════════════════════════════════ */}
+            {/* ══ 1. HERO ════════════════════════════════════════════════ */}
             <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
@@ -95,7 +152,7 @@ export default function Services() {
                 </motion.div>
             </section>
 
-            {/* ══ 2. CORE SERVICES GRID ═════════════════════════════════ */}
+            {/* ══ 2. CORE SERVICES GRID ══════════════════════════════════ */}
             <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 w-full">
                 <div className="max-w-7xl mx-auto">
                     <SectionLabel text="Core Services" />
@@ -109,7 +166,7 @@ export default function Services() {
                         className="text-zinc-500 text-sm md:text-base max-w-xl mb-12 leading-relaxed"
                         custom={1} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
                     >
-                        We offer a full spectrum of software engineering services — designed to take your idea from concept to a live, scalable product.
+                        A full spectrum of software engineering services — designed to take your idea from concept to a live, scalable product.
                     </motion.p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -130,20 +187,28 @@ export default function Services() {
                                     <h3 className="text-zinc-900 font-medium text-lg mb-2">{svc.title}</h3>
                                     <p className="text-zinc-500 text-sm leading-relaxed">{svc.desc}</p>
                                 </div>
-                                <ul className="flex flex-wrap gap-2 mt-auto">
+                                <div className="flex flex-wrap gap-2">
                                     {svc.bullets.map((b, j) => (
-                                        <li key={j} className="text-xs bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full">
+                                        <span key={j} className="text-xs bg-zinc-100 text-zinc-600 px-3 py-1 rounded-full">
                                             {b}
-                                        </li>
+                                        </span>
                                     ))}
-                                </ul>
+                                </div>
+                                {/* Learn More */}
+                                <button
+                                    onClick={() => handleLearnMore(svc.title)}
+                                    className="mt-auto flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors group/btn w-fit cursor-pointer"
+                                >
+                                    Learn More
+                                    <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
+                                </button>
                             </motion.div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ══ 3. TECH STACK ═════════════════════════════════════════ */}
+            {/* ══ 3. TECHNOLOGY STACK (with logos) ══════════════════════ */}
             <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 bg-gray-50 w-full">
                 <div className="max-w-7xl mx-auto">
                     <SectionLabel text="Technology Stack" />
@@ -157,7 +222,7 @@ export default function Services() {
                         className="text-zinc-500 text-sm md:text-base max-w-xl mb-12 leading-relaxed"
                         custom={1} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
                     >
-                        We use battle-tested, modern technologies — chosen for performance, scalability, and developer experience.
+                        Battle-tested, modern technologies — chosen for performance, scalability, and developer experience.
                     </motion.p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -171,15 +236,21 @@ export default function Services() {
                                 viewport={{ once: true }}
                                 className="bg-white border border-zinc-200 rounded-xl p-6 hover:shadow-md transition-shadow duration-300"
                             >
-                                <span className="text-xs uppercase tracking-widest text-zinc-400 font-medium block mb-4">{cat.label}</span>
-                                <div className="flex flex-wrap gap-2">
+                                <span className="text-xs uppercase tracking-widest text-zinc-400 font-medium block mb-5">{cat.label}</span>
+                                <div className="flex flex-col gap-3">
                                     {cat.techs.map((tech, j) => (
-                                        <span
+                                        <div
                                             key={j}
-                                            className="text-xs bg-zinc-900 text-zinc-100 px-3 py-1.5 rounded-full font-medium hover:bg-zinc-700 transition-colors cursor-default"
+                                            className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-zinc-50 transition-colors duration-200 group cursor-default"
                                         >
-                                            {tech}
-                                        </span>
+                                            <img
+                                                src={tech.icon}
+                                                alt={tech.name}
+                                                className="size-6 object-contain group-hover:scale-110 transition-transform duration-200"
+                                                loading="lazy"
+                                            />
+                                            <span className="text-sm text-zinc-700 font-medium">{tech.name}</span>
+                                        </div>
                                     ))}
                                 </div>
                             </motion.div>
@@ -188,7 +259,7 @@ export default function Services() {
                 </div>
             </section>
 
-            {/* ══ 4. DEVELOPMENT PROCESS ════════════════════════════════ */}
+            {/* ══ 4. DEVELOPMENT PROCESS ═════════════════════════════════ */}
             <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 w-full">
                 <div className="max-w-7xl mx-auto">
                     <SectionLabel text="Our Process" />
@@ -205,11 +276,8 @@ export default function Services() {
                         A proven, transparent workflow — from first conversation to final deployment.
                     </motion.p>
 
-                    {/* Timeline */}
                     <div className="relative">
-                        {/* Vertical line for desktop */}
                         <div className="hidden lg:block absolute left-[calc(50%-0.5px)] top-0 bottom-0 w-px bg-zinc-200" />
-
                         <div className="flex flex-col gap-10">
                             {processSteps.map((step, i) => {
                                 const isLeft = i % 2 === 0;
@@ -223,22 +291,15 @@ export default function Services() {
                                         viewport={{ once: true }}
                                         className={`relative flex flex-col lg:flex-row items-start lg:items-center gap-6 ${isLeft ? "lg:flex-row" : "lg:flex-row-reverse"}`}
                                     >
-                                        {/* Card */}
                                         <div className={`w-full lg:w-[calc(50%-2.5rem)] bg-white border border-zinc-200 rounded-xl p-6 hover:shadow-md transition-shadow duration-300 ${isLeft ? "lg:text-right" : "lg:text-left"}`}>
-                                            <div className={`flex items-center gap-3 mb-3 ${isLeft ? "lg:flex-row-reverse" : "lg:flex-row"}`}>
-                                                <div className="p-2 bg-zinc-100 rounded-lg shrink-0">
-                                                    {step.icon}
-                                                </div>
+                                            <div className={`flex items-center gap-3 mb-3 ${isLeft ? "lg:flex-row-reverse" : ""}`}>
+                                                <div className="p-2 bg-zinc-100 rounded-lg shrink-0">{step.icon}</div>
                                                 <span className="text-xs text-zinc-400 font-medium uppercase tracking-widest">Step {step.step}</span>
                                             </div>
                                             <h3 className="text-zinc-900 font-medium text-lg mb-2">{step.title}</h3>
                                             <p className="text-zinc-500 text-sm leading-relaxed">{step.desc}</p>
                                         </div>
-
-                                        {/* Centre dot */}
                                         <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 size-5 rounded-full bg-zinc-900 border-4 border-white shadow-md z-10" />
-
-                                        {/* Spacer */}
                                         <div className="hidden lg:block w-[calc(50%-2.5rem)]" />
                                     </motion.div>
                                 );
@@ -248,7 +309,7 @@ export default function Services() {
                 </div>
             </section>
 
-            {/* ══ 5. WHY CHOOSE US ══════════════════════════════════════ */}
+            {/* ══ 5. WHY CHOOSE US ════════════════════════════════════════ */}
             <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 bg-gray-50 w-full">
                 <div className="max-w-7xl mx-auto">
                     <SectionLabel text="Why Choose Us" />
@@ -264,7 +325,6 @@ export default function Services() {
                     >
                         We don't just write code — we take ownership of your product's success, every step of the way.
                     </motion.p>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {benefits.map((b, i) => (
                             <motion.div
@@ -289,7 +349,75 @@ export default function Services() {
                 </div>
             </section>
 
-            {/* ══ 6. FINAL CTA ══════════════════════════════════════════ */}
+            {/* ══ 6. TESTIMONIALS ════════════════════════════════════════ */}
+            <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 w-full">
+                <div className="max-w-7xl mx-auto">
+                    <SectionLabel text="Client Stories" />
+                    <motion.h2
+                        className="text-4xl md:text-5xl font-medium text-zinc-900 mb-12 max-w-2xl leading-tight"
+                        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                    >
+                        Trusted by teams building great products
+                    </motion.h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {testimonials.map((t, i) => (
+                            <motion.div
+                                key={i}
+                                custom={i}
+                                variants={fadeUp}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true }}
+                                className="flex flex-col gap-5 border border-zinc-200 rounded-xl p-7 bg-white hover:shadow-md transition-shadow duration-300"
+                            >
+                                <Quote size={22} className="text-zinc-300" />
+                                <p className="text-zinc-600 text-sm leading-relaxed flex-1 italic">"{t.quote}"</p>
+                                <div className="flex items-center gap-3 pt-4 border-t border-zinc-100">
+                                    <div className="size-9 rounded-full bg-zinc-900 text-white flex items-center justify-center text-sm font-medium shrink-0">
+                                        {t.initial}
+                                    </div>
+                                    <div>
+                                        <p className="text-zinc-900 font-medium text-sm">{t.name}</p>
+                                        <p className="text-zinc-400 text-xs">{t.role}, {t.company}</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ══ 7. FAQs ════════════════════════════════════════════════ */}
+            <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 bg-gray-50 w-full">
+                <div className="max-w-3xl mx-auto">
+                    <SectionLabel text="FAQ" />
+                    <motion.h2
+                        className="text-4xl md:text-5xl font-medium text-zinc-900 mb-4 leading-tight"
+                        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                    >
+                        Questions we hear every day
+                    </motion.h2>
+                    <motion.p
+                        className="text-zinc-500 text-sm md:text-base mb-10 leading-relaxed"
+                        custom={1} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+                    >
+                        Can't find your answer? <button onClick={handleCTA} className="text-zinc-900 underline underline-offset-2 cursor-pointer hover:text-zinc-600 transition-colors">Send us a message →</button>
+                    </motion.p>
+                    <div className="flex flex-col gap-3">
+                        {faqs.map((faq, i) => (
+                            <FAQItem
+                                key={i}
+                                faq={faq}
+                                index={i}
+                                open={openFAQ === i}
+                                onToggle={() => setOpenFAQ(openFAQ === i ? null : i)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ══ 8. FINAL CTA ═══════════════════════════════════════════ */}
             <section className="py-24 px-4 md:px-16 lg:px-24 xl:px-32 bg-zinc-950">
                 <motion.div
                     className="max-w-7xl mx-auto flex flex-col items-center text-center gap-7"
