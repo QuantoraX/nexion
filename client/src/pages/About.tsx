@@ -2,7 +2,6 @@ import { motion, Variants } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Globe, ChevronRight, ArrowRight, CheckCircle2 } from "lucide-react";
-import logo1 from "../assets/logo1.png";
 import aboutTeam from "../assets/about-team.png";
 import aboutMission from "../assets/about-mission.png";
 import {
