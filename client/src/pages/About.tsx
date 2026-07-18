@@ -346,30 +346,6 @@ export default function About() {
                 </div>
             </section>
 
-            {/* ── 8. CTA ─────────────────────────────────────────────── */}
-            <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 bg-zinc-950">
-                <motion.div
-                    className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8"
-                    variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                >
-                    <div>
-                        <h2 className="text-3xl md:text-4xl font-medium text-white leading-tight max-w-lg">
-                            Ready to build something <span className="text-zinc-400">remarkable?</span>
-                        </h2>
-                        <p className="text-zinc-400 text-sm mt-3 max-w-md leading-relaxed">
-                            Let's talk about your next big idea. We'll turn it into a product your users will love.
-                        </p>
-                    </div>
-                    <button
-                        onClick={handleContactClick}
-                        className="flex items-center gap-2 shrink-0 bg-zinc-50 hover:bg-white text-zinc-900 px-8 py-3.5 rounded-full text-sm font-medium transition-all group cursor-pointer"
-                    >
-                        Start a Project
-                        <ChevronRight size={15} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
-                </motion.div>
-            </section>
-
         </div>
     );
 }

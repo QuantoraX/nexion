@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { ArrowRight, ChevronRight, ChevronDown, Zap, Quote } from "lucide-react";
+import { ArrowRight, ChevronDown, Zap, Quote } from "lucide-react";
 import { services, techStack, processSteps, benefits, testimonials, faqs } from "../data/services-data";
 
 /* ─── Animation variant ─────────────────────────────────────────── */
@@ -415,40 +415,6 @@ export default function Services() {
                         ))}
                     </div>
                 </div>
-            </section>
-
-            {/* ══ 8. FINAL CTA ═══════════════════════════════════════════ */}
-            <section className="py-24 px-4 md:px-16 lg:px-24 xl:px-32 bg-zinc-950">
-                <motion.div
-                    className="max-w-7xl mx-auto flex flex-col items-center text-center gap-7"
-                    variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-                >
-                    <div className="bg-white/5 border border-white/10 text-sm text-zinc-300 pl-3 pr-5 py-1.5 rounded-full flex items-center gap-2">
-                        <Zap size={13} />
-                        <span>Let's build something together</span>
-                    </div>
-                    <h2 className="text-3xl md:text-5xl font-medium text-white leading-tight max-w-2xl">
-                        Ready to bring your <span className="text-zinc-400">digital vision</span> to life?
-                    </h2>
-                    <p className="text-zinc-400 text-sm md:text-base max-w-lg leading-relaxed">
-                        Book a free 30-minute consultation and let's explore how Nexion can accelerate your next project.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
-                        <button
-                            onClick={handleCTA}
-                            className="flex items-center gap-2 bg-zinc-50 hover:bg-white text-zinc-900 px-8 py-3.5 rounded-full text-sm font-medium transition-all group cursor-pointer"
-                        >
-                            Contact Our Team
-                            <ChevronRight size={15} className="group-hover:translate-x-1 transition-transform" />
-                        </button>
-                        <Link
-                            to="/about"
-                            className="text-zinc-400 hover:text-white text-sm transition-colors flex items-center gap-1.5 group"
-                        >
-                            Meet the team <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </div>
-                </motion.div>
             </section>
 
         </div>

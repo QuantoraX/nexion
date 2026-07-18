@@ -1,20 +1,10 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import galleryImage1 from "../assets/galleryImage1.png";
-import galleryImage2 from "../assets/galleryImage2.png";
-import galleryImage3 from "../assets/galleryImage3.png";
-import galleryImage4 from "../assets/galleryImage4.png";
+import { Link } from "react-router-dom";
+import { portfolioProjects } from "../data/portfolio-data";
 
-const projects = [
-    { src: galleryImage1, title: "Analytics Dashboard", category: "SaaS · Web App" },
-    { src: galleryImage2, title: "FinTech Mobile App", category: "iOS · Android" },
-    { src: galleryImage3, title: "E-Commerce Platform", category: "Full-Stack · Web" },
-    { src: galleryImage4, title: "AI Powered Tool", category: "Machine Learning · API" },
-    { src: galleryImage1, title: "Analytics Dashboard", category: "SaaS · Web App" },
-    { src: galleryImage2, title: "FinTech Mobile App", category: "iOS · Android" },
-    { src: galleryImage3, title: "E-Commerce Platform", category: "Full-Stack · Web" },
-    { src: galleryImage4, title: "AI Powered Tool", category: "Machine Learning · API" },
-];
+// Double list to keep horizontal track width for horizontal scroll experience
+const displayProjects = [...portfolioProjects, ...portfolioProjects];
 
 export function Gallery() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -99,8 +89,12 @@ export function Gallery() {
                     ref={trackRef}
                     className="flex gap-5 px-4 md:px-16 lg:px-24 xl:px-32 will-change-transform transition-transform duration-300 ease-out"
                 >
-                    {projects.map((project, index) => (
-                        <div key={index} className="relative w-80 h-96 shrink-0 overflow-hidden rounded-2xl group cursor-pointer">
+                    {displayProjects.map((project, index) => (
+                        <Link 
+                            key={index} 
+                            to={`/portfolio/${project.slug}`}
+                            className="relative w-80 h-96 shrink-0 overflow-hidden rounded-2xl group cursor-pointer block"
+                        >
                             <img
                                 src={project.src}
                                 alt={project.title}
@@ -110,10 +104,10 @@ export function Gallery() {
                             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                             {/* Label */}
                             <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                                <span className="text-xs text-zinc-300 uppercase tracking-widest">{project.category}</span>
+                                <span className="text-xs text-zinc-300 uppercase tracking-widest">{project.subtitle}</span>
                                 <h3 className="text-white text-lg font-medium mt-1">{project.title}</h3>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
 
