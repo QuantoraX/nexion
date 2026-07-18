@@ -38,8 +38,8 @@ export const contactInfo = [
     },
     {
         icon: "location",
-        label: "Based In",
-        value: "Colombo, Sri Lanka · Remote-Friendly",
+        label: "Remote-First Agency",
+        value: "Colombo, Sri Lanka · Global Operations",
         href: null,
     },
     {

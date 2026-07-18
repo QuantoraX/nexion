@@ -29,7 +29,7 @@ export function Navbar() {
         { label: "Home", to: "/" },
         { label: "About", to: "/about" },
         { label: "Services", to: "/services" },
-        { label: "Contact", to: "/#contact" },
+        { label: "Contact", to: "/contact" },
     ];
 
     return (

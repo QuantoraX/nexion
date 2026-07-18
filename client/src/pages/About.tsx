@@ -30,7 +30,7 @@ export default function About() {
             style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" },
             iconTheme: { primary: "#a1a1aa", secondary: "#18181b" }
         });
-        setTimeout(() => navigate("/"), 1200);
+        setTimeout(() => navigate("/contact"), 1200);
     };
 
     return (
