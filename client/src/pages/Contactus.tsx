@@ -10,6 +10,7 @@ import {
     ArrowRight,
     ChevronDown,
     CheckCircle2,
+    MessageSquare,
 } from "lucide-react";
 import { budgetOptions, projectTypeOptions, contactInfo, contactFaqs } from "../data/contact-data";
 import contactWorkspace from "../assets/contact-workspace.png";
@@ -134,38 +135,39 @@ export default function Contactus() {
     };
 
     return (
-        <div className="bg-white text-zinc-900 w-full overflow-x-hidden pt-20">
+        <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="py-16 md:py-24 px-4 md:px-16 lg:px-24 xl:px-32 bg-gray-50 border-b border-zinc-100">
-                <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
-                    <motion.div
-                        className="flex items-center gap-1.5 mb-5"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <span className="size-1.5 bg-zinc-900 inline-block rounded-full" />
-                        <span className="text-sm text-zinc-900 uppercase tracking-widest font-medium">Let's Connect</span>
-                    </motion.div>
-                    
-                    <motion.h1
-                        className="text-4xl md:text-6xl font-medium leading-tight max-w-3xl text-zinc-900"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1, type: "spring", stiffness: 240, damping: 70 }}
-                    >
-                        Let’s build something great together
-                    </motion.h1>
+            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center">
+                <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
-                    <motion.p
-                        className="mt-6 text-zinc-500 max-w-xl text-base md:text-lg leading-relaxed"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, type: "spring", stiffness: 240, damping: 70 }}
-                    >
-                        Whether you have a fully drafted spec or just an idea, we’re here to help you scope, design, and build your digital solution.
-                    </motion.p>
-                </div>
+                <motion.div
+                    className="relative z-10 bg-white/10 backdrop-blur border border-white/20 text-sm text-white pl-3 pr-5 py-1.5 rounded-full flex items-center gap-2 mb-6"
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
+                >
+                    <MessageSquare size={14} />
+                    <span>Let's Connect</span>
+                </motion.div>
+
+                <motion.h1
+                    className="relative z-10 text-4xl md:text-6xl font-medium leading-tight max-w-3xl text-white"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ type: "spring" as const, stiffness: 240, damping: 70 }}
+                >
+                    Let’s build something great together
+                </motion.h1>
+
+                <motion.p
+                    className="relative z-10 mt-4 text-zinc-300 max-w-lg text-base leading-relaxed"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
+                >
+                    Whether you have a fully drafted spec or just an idea, we’re here to help you scope, design, and build your digital solution.
+                </motion.p>
             </section>
 
             {/* ══ 2. TWO-COLUMN LAYOUT (FORM & DETAILS) ═════════════════ */}
