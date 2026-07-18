@@ -1,37 +1,22 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronRight, Briefcase, Tag } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Briefcase, Tag } from "lucide-react";
 import { portfolioProjects, portfolioCategories } from "../data/portfolio-data";
-
-/* ─── Animation Variant ─────────────────────────────────────────── */
-const fadeUp = {
-    hidden: { y: 30, opacity: 0 },
-    visible: (i = 0) => ({
-        y: 0,
-        opacity: 1,
-        transition: { delay: i * 0.08, type: "spring" as const, stiffness: 240, damping: 70 }
-    })
-};
 
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function Portfolio() {
-    const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState("All");
 
     const filteredProjects = activeCategory === "All"
         ? portfolioProjects
         : portfolioProjects.filter(p => p.category === activeCategory);
 
-    const handleCTA = () => {
-        navigate("/contact");
-    };
-
     return (
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center">
+            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
                 <motion.div
@@ -97,7 +82,7 @@ export default function Portfolio() {
                         className="grid grid-cols-1 md:grid-cols-2 gap-8"
                     >
                         <AnimatePresence mode="popLayout">
-                            {filteredProjects.map((project, idx) => (
+                            {filteredProjects.map((project) => (
                                 <motion.div
                                     layout
                                     key={project.slug}

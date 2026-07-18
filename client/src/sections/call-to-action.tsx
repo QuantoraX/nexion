@@ -1,5 +1,6 @@
 import { MoveRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import galleryImage1 from "../assets/galleryImage1.png";
 import galleryImage2 from "../assets/galleryImage2.png";
 import galleryImage3 from "../assets/galleryImage3.png";
@@ -20,7 +21,7 @@ export function CallToAction() {
           viewport={{ once: true }}
           transition={{ type: "spring", stiffness: 240, damping: 70, mass: 1 }}
         >
-          Find the Perfect Property for Your Lifestyle
+          Ready to scale your next digital product?
         </motion.h2>
 
         <motion.p className="text-zinc-500 text-sm max-w-100 mb-7"
@@ -29,18 +30,20 @@ export function CallToAction() {
           viewport={{ once: true }}
           transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
         >
-          Explore premium homes, modern apartments and investment opportunities in the most desirable locations.
+          We engineer robust web applications, responsive custom software, and scalable SaaS solutions.
         </motion.p>
 
-        <motion.button className="bg-black hover:bg-zinc-900 text-white text-sm px-5 py-3.5 rounded-lg transition-all duration-200 flex items-center gap-2 group cursor-pointer"
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
-        >
-          <span>Browse Properties</span>
-          <MoveRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
-        </motion.button>
+        <Link to="/contact" className="no-underline block">
+          <motion.div className="bg-black hover:bg-zinc-900 text-white text-sm px-5 py-3.5 rounded-lg transition-all duration-200 flex items-center gap-2 group cursor-pointer"
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
+          >
+            <span>Let's Talk Project</span>
+            <MoveRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
+          </motion.div>
+        </Link>
       </div>
     </section>
   );

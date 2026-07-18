@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export function HeroSection() {
     return (
-        <motion.section className="flex flex-col items-center min-h-screen justify-center bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center bg-no-repeat px-4 w-full" 
+        <motion.section className="flex flex-col items-center min-h-screen justify-center bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center bg-no-repeat px-4 w-full" 
             initial={{ opacity: 0.4 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

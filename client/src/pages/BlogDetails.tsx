@@ -41,7 +41,7 @@ export default function BlogDetails() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO HEADER ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center">
+            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/75 pointer-events-none" />
 
                 <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">

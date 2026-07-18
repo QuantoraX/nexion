@@ -100,7 +100,7 @@ export default function Services() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO ════════════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('tech-hero-bg.png')] bg-cover bg-center">
+            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
                 <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
                 <motion.div
