@@ -115,46 +115,46 @@ export default function Blog() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.96 }}
                                     transition={{ duration: 0.25 }}
-                                    className={`group flex flex-col border border-zinc-200 rounded-2xl p-6 md:p-8 bg-white transition-all duration-300 outline-hidden ${getGlowStyles(article.category)}`}
+                                    className="h-full block"
                                 >
-                                    {/* Badge and Metadata */}
-                                    <div className="flex items-center justify-between gap-4 mb-6">
-                                        <span className={`text-[10px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full border ${getBadgeStyles(article.category)}`}>
-                                            {article.category}
-                                        </span>
-                                        <div className="flex items-center gap-3 text-xs text-zinc-400">
-                                            <span className="flex items-center gap-1">
-                                                <Calendar size={12} />
-                                                <span>{article.date}</span>
+                                    <Link
+                                        to={`/blog/${article.slug}`}
+                                        className={`group flex flex-col h-full border border-zinc-200 rounded-2xl p-6 md:p-8 bg-white transition-all duration-300 outline-hidden hover:no-underline text-inherit cursor-pointer select-none ${getGlowStyles(article.category)}`}
+                                    >
+                                        {/* Badge and Metadata */}
+                                        <div className="flex items-center justify-between gap-4 mb-6">
+                                            <span className={`text-[10px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full border ${getBadgeStyles(article.category)}`}>
+                                                {article.category}
                                             </span>
-                                            <span>•</span>
-                                            <span className="flex items-center gap-1">
-                                                <Clock size={12} />
-                                                <span>{article.readTime}</span>
-                                            </span>
+                                            <div className="flex items-center gap-3 text-xs text-zinc-400">
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar size={12} />
+                                                    <span>{article.date}</span>
+                                                </span>
+                                                <span>•</span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock size={12} />
+                                                    <span>{article.readTime}</span>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Link and Content */}
-                                    <Link to={`/blog/${article.slug}`} className="block focus:outline-none">
+                                        {/* Header Title */}
                                         <h3 className="text-xl md:text-2xl font-medium text-zinc-900 group-hover:text-zinc-950 transition-colors leading-tight">
                                             {article.title}
                                         </h3>
-                                    </Link>
-                                    <p className="text-zinc-500 text-sm leading-relaxed mt-3 mb-6 flex-1">
-                                        {article.excerpt}
-                                    </p>
+                                        <p className="text-zinc-500 text-sm leading-relaxed mt-3 mb-6 flex-1">
+                                            {article.excerpt}
+                                        </p>
 
-                                    {/* Action link */}
-                                    <div className="pt-4 border-t border-zinc-100 flex items-center justify-between mt-auto">
-                                        <Link 
-                                            to={`/blog/${article.slug}`}
-                                            className="flex items-center gap-1.5 text-xs font-semibold text-zinc-900 group-hover:text-zinc-950 transition-colors group/link cursor-pointer"
-                                        >
-                                            <span>Read Article</span>
-                                            <ArrowRight size={13} className="group-hover/link:translate-x-1 transition-transform" />
-                                        </Link>
-                                    </div>
+                                        {/* Action link */}
+                                        <div className="pt-4 border-t border-zinc-100 flex items-center justify-between mt-auto">
+                                            <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-900 group-hover:text-zinc-950 transition-colors group/link cursor-pointer">
+                                                <span>Read Article</span>
+                                                <ArrowRight size={13} className="group-hover/link:translate-x-1 transition-transform" />
+                                            </div>
+                                        </div>
+                                    </Link>
                                 </motion.div>
                             ))}
                         </AnimatePresence>
