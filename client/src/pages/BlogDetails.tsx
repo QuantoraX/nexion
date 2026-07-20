@@ -1,14 +1,14 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, BookOpen, Calendar, Clock, ShieldAlert } from "lucide-react";
-import { getBlogArticles } from "../data/blog-data";
+import { useAppContext } from "../context/appContext";
 
 export default function BlogDetails() {
     const { slug } = useParams<{ slug: string }>();
-    const blogArticles = getBlogArticles();
+    const { blogs } = useAppContext();
 
     // Find article
-    const article = blogArticles.find(a => a.slug === slug);
+    const article = blogs.find(a => a.slug === slug);
 
     // If article not found
     if (!article) {

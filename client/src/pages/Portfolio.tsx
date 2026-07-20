@@ -1,17 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Tag } from "lucide-react";
-import { getPortfolioProjects, portfolioCategories, PortfolioProject } from "../data/portfolio-data";
+import { portfolioCategories } from "../data/portfolio-data";
+import { useAppContext } from "../context/appContext";
 
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function Portfolio() {
-    const [projects, setProjects] = useState<PortfolioProject[]>([]);
+    const { projects } = useAppContext();
     const [activeCategory, setActiveCategory] = useState("All");
-
-    useEffect(() => {
-        setProjects(getPortfolioProjects());
-    }, []);
 
     const filteredProjects = activeCategory === "All"
         ? projects

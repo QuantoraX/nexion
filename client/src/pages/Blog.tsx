@@ -1,16 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Clock, Calendar } from "lucide-react";
-import { getBlogArticles, blogCategories, BlogArticle } from "../data/blog-data";
+import { blogCategories } from "../data/blog-data";
+import { useAppContext } from "../context/appContext";
 
 export default function Blog() {
-    const [articles, setArticles] = useState<BlogArticle[]>([]);
+    const { blogs: articles } = useAppContext();
     const [activeCategory, setActiveCategory] = useState("All");
-
-    useEffect(() => {
-        setArticles(getBlogArticles());
-    }, []);
 
     const filteredArticles = activeCategory === "All"
         ? articles

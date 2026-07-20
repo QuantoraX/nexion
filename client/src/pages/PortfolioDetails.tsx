@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 import { ArrowLeft, ArrowRight, Calendar, User, Layers, CheckCircle2, ShieldAlert } from "lucide-react";
-import { getPortfolioProjects } from "../data/portfolio-data";
+import { useAppContext } from "../context/appContext";
 
 /* ─── Animation Variant ─────────────────────────────────────────── */
 const fadeUp: Variants = {
@@ -15,7 +15,7 @@ const fadeUp: Variants = {
 
 export default function PortfolioDetails() {
     const { slug } = useParams<{ slug: string }>();
-    const portfolioProjects = getPortfolioProjects();
+    const { projects: portfolioProjects } = useAppContext();
 
     // Find project
     const projectIndex = portfolioProjects.findIndex(p => p.slug === slug);

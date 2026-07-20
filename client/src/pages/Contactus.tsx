@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getContactSubmissions, saveContactSubmissions, ContactSubmission } from "../data/data";
+import { useAppContext } from "../context/appContext";
 import {
     Mail,
     Phone,
@@ -40,29 +40,28 @@ function FAQItem({ faq, index, open, onToggle }: {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="border border-zinc-200 rounded-xl overflow-hidden bg-white"
+            className="border border-zinc-200 rounded-xl overflow-hidden bg-white shadow-xs"
         >
             <button
                 onClick={onToggle}
-                className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left group cursor-pointer hover:bg-zinc-50 transition-colors duration-200"
+                className="w-full px-6 py-5 flex items-center justify-between text-left cursor-pointer hover:bg-zinc-50/50 transition-colors"
             >
-                <span className="text-zinc-900 font-medium text-sm md:text-base leading-snug">{faq.q}</span>
-                <ChevronDown
-                    size={18}
-                    className={`text-zinc-400 shrink-0 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-                />
+                <span className="text-base font-medium text-zinc-900 pr-4">{faq.q}</span>
+                <div className={`p-1.5 rounded-full bg-zinc-100 text-zinc-600 transition-transform duration-300 ${open ? "rotate-180 bg-zinc-950 text-white" : ""}`}>
+                    <ChevronDown size={14} />
+                </div>
             </button>
-            <AnimatePresence initial={false}>
+
+            <AnimatePresence>
                 {open && (
                     <motion.div
-                        key="content"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25, ease: "easeInOut" }}
                         className="overflow-hidden"
                     >
-                        <p className="px-6 pb-5 text-zinc-500 text-sm leading-relaxed border-t border-zinc-100 pt-4">
+                        <p className="px-6 pb-6 pt-1 text-sm text-zinc-600 leading-relaxed border-t border-zinc-100/60">
                             {faq.a}
                         </p>
                     </motion.div>
@@ -75,6 +74,7 @@ function FAQItem({ faq, index, open, onToggle }: {
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function Contactus() {
     const navigate = useNavigate();
+    const { submitInquiry } = useAppContext();
     const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
     // Form state
@@ -94,7 +94,7 @@ export default function Contactus() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!formData.name || !formData.email || !formData.projectType || !formData.message) {
@@ -104,35 +104,10 @@ export default function Contactus() {
 
         setIsSubmitting(true);
 
-        // Save submission to localStorage
-        const submissions = getContactSubmissions();
-        const newSub: ContactSubmission = {
-            id: Date.now().toString(),
-            name: formData.name,
-            email: formData.email,
-            company: formData.company || "None",
-            budget: formData.budget || "Not Specified",
-            projectType: formData.projectType,
-            message: formData.message,
-            date: new Date().toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-            }),
-            status: "new"
-        };
-        submissions.unshift(newSub);
-        saveContactSubmissions(submissions);
+        const success = await submitInquiry(formData);
+        setIsSubmitting(false);
 
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            toast.success("Thank you! We will get in touch within 24 hours.", {
-                style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" },
-                iconTheme: { primary: "#10b981", secondary: "#18181b" }
-            });
+        if (success) {
             setFormData({
                 name: "",
                 email: "",
@@ -144,7 +119,7 @@ export default function Contactus() {
             setTimeout(() => {
                 navigate("/");
             }, 1500);
-        }, 1200);
+        }
     };
 
     const getIcon = (iconName: string) => {
