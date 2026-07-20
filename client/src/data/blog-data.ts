@@ -10,7 +10,7 @@ export interface BlogArticle {
 
 export const blogCategories = ["All", "Engineering", "Design", "Productivity", "Startup"];
 
-export const blogArticles: BlogArticle[] = [
+const initialBlogArticles: BlogArticle[] = [
     {
         slug: "scalable-saas-products-2026",
         category: "Startup",
@@ -80,3 +80,34 @@ export const blogArticles: BlogArticle[] = [
         ]
     }
 ];
+
+export const getBlogArticles = (): BlogArticle[] => {
+    if (typeof window === "undefined") return initialBlogArticles;
+    const data = localStorage.getItem("nexion_blog_articles");
+    if (!data) {
+        localStorage.setItem("nexion_blog_articles", JSON.stringify(initialBlogArticles));
+        return initialBlogArticles;
+    }
+    try {
+        return JSON.parse(data);
+    } catch {
+        return initialBlogArticles;
+    }
+};
+
+export const saveBlogArticles = (articles: BlogArticle[]) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("nexion_blog_articles", JSON.stringify(articles));
+    // Sync array in place
+    blogArticles.length = 0;
+    blogArticles.push(...articles);
+};
+
+export const blogArticles: BlogArticle[] = [];
+if (typeof window !== "undefined") {
+    const articles = getBlogArticles();
+    blogArticles.push(...articles);
+} else {
+    blogArticles.push(...initialBlogArticles);
+}
+

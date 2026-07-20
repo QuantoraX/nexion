@@ -25,7 +25,7 @@ export interface PortfolioProject {
 
 export const portfolioCategories = ["All", "SaaS", "Mobile App", "E-Commerce", "AI / ML"];
 
-export const portfolioProjects: PortfolioProject[] = [
+const initialPortfolioProjects: PortfolioProject[] = [
     {
         slug: "analytics-dashboard",
         title: "Aegis Analytics Dashboard",
@@ -99,3 +99,32 @@ export const portfolioProjects: PortfolioProject[] = [
         ]
     }
 ];
+
+export const getPortfolioProjects = (): PortfolioProject[] => {
+    if (typeof window === "undefined") return initialPortfolioProjects;
+    const data = localStorage.getItem("nexion_portfolio_projects");
+    if (!data) {
+        localStorage.setItem("nexion_portfolio_projects", JSON.stringify(initialPortfolioProjects));
+        return initialPortfolioProjects;
+    }
+    try {
+        return JSON.parse(data);
+    } catch {
+        return initialPortfolioProjects;
+    }
+};
+
+export const savePortfolioProjects = (projects: PortfolioProject[]) => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("nexion_portfolio_projects", JSON.stringify(projects));
+    portfolioProjects.length = 0;
+    portfolioProjects.push(...projects);
+};
+
+export const portfolioProjects: PortfolioProject[] = [];
+if (typeof window !== "undefined") {
+    portfolioProjects.push(...getPortfolioProjects());
+} else {
+    portfolioProjects.push(...initialPortfolioProjects);
+}
+

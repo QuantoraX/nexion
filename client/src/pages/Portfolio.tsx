@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Tag } from "lucide-react";
-import { portfolioProjects, portfolioCategories } from "../data/portfolio-data";
+import { getPortfolioProjects, portfolioCategories, PortfolioProject } from "../data/portfolio-data";
 
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function Portfolio() {
+    const [projects, setProjects] = useState<PortfolioProject[]>([]);
     const [activeCategory, setActiveCategory] = useState("All");
 
+    useEffect(() => {
+        setProjects(getPortfolioProjects());
+    }, []);
+
     const filteredProjects = activeCategory === "All"
-        ? portfolioProjects
-        : portfolioProjects.filter(p => p.category === activeCategory);
+        ? projects
+        : projects.filter(p => p.category === activeCategory);
 
     return (
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">

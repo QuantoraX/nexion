@@ -1,10 +1,19 @@
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
-import { testimonialsCol1, testimonialsCol2 } from "../data/data";
+import { getTestimonialsCol1, getTestimonialsCol2, TestimonialItem } from "../data/data";
 
 export function Testimonials() {
-    const renderCard = (item: typeof testimonialsCol1[0], index: number) => (
-        <div key={index} className="bg-white p-6 rounded-xl flex flex-col gap-4 w-70 sm:w-[320px] select-none">
+    const [col1, setCol1] = useState<TestimonialItem[]>([]);
+    const [col2, setCol2] = useState<TestimonialItem[]>([]);
+
+    useEffect(() => {
+        setCol1(getTestimonialsCol1());
+        setCol2(getTestimonialsCol2());
+    }, []);
+
+    const renderCard = (item: TestimonialItem, index: number) => (
+        <div key={index} className="bg-white p-6 rounded-xl flex flex-col gap-4 w-70 sm:w-[320px] select-none shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-zinc-100">
             <div className="flex items-center gap-3">
                 <img src={item.avatar} alt={item.name} className="size-11 rounded-full object-cover shrink-0" />
                 <div className="flex flex-col">
@@ -78,16 +87,16 @@ export function Testimonials() {
                     {/* Column 1 (Scrolls Upwards) */}
                     <div className="overflow-hidden h-full flex flex-col">
                         <div className="flex flex-col gap-5 animate-marquee-up py-2">
-                            {testimonialsCol1.map((item, index) => renderCard(item, index))}
-                            {testimonialsCol1.map((item, index) => renderCard(item, index + testimonialsCol1.length))}
+                            {col1.map((item, index) => renderCard(item, index))}
+                            {col1.map((item, index) => renderCard(item, index + col1.length))}
                         </div>
                     </div>
 
                     {/* Column 2 (Scrolls Downwards) */}
                     <div className="overflow-hidden h-full hidden sm:flex flex-col">
                         <div className="flex flex-col gap-5 animate-marquee-down py-2">
-                            {testimonialsCol2.map((item, index) => renderCard(item, index))}
-                            {testimonialsCol2.map((item, index) => renderCard(item, index + testimonialsCol2.length))}
+                            {col2.map((item, index) => renderCard(item, index))}
+                            {col2.map((item, index) => renderCard(item, index + col2.length))}
                         </div>
                     </div>
                 </div>

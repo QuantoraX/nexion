@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { getContactSubmissions, saveContactSubmissions, ContactSubmission } from "../data/data";
 import {
     Mail,
     Phone,
@@ -103,6 +104,28 @@ export default function Contactus() {
 
         setIsSubmitting(true);
 
+        // Save submission to localStorage
+        const submissions = getContactSubmissions();
+        const newSub: ContactSubmission = {
+            id: Date.now().toString(),
+            name: formData.name,
+            email: formData.email,
+            company: formData.company || "None",
+            budget: formData.budget || "Not Specified",
+            projectType: formData.projectType,
+            message: formData.message,
+            date: new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }),
+            status: "new"
+        };
+        submissions.unshift(newSub);
+        saveContactSubmissions(submissions);
+
         // Simulate API call
         setTimeout(() => {
             setIsSubmitting(false);
@@ -121,7 +144,7 @@ export default function Contactus() {
             setTimeout(() => {
                 navigate("/");
             }, 1500);
-        }, 1500);
+        }, 1200);
     };
 
     const getIcon = (iconName: string) => {

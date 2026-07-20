@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Clock, Calendar } from "lucide-react";
-import { blogArticles, blogCategories } from "../data/blog-data";
+import { getBlogArticles, blogCategories, BlogArticle } from "../data/blog-data";
 
 export default function Blog() {
+    const [articles, setArticles] = useState<BlogArticle[]>([]);
     const [activeCategory, setActiveCategory] = useState("All");
 
+    useEffect(() => {
+        setArticles(getBlogArticles());
+    }, []);
+
     const filteredArticles = activeCategory === "All"
-        ? blogArticles
-        : blogArticles.filter(art => art.category === activeCategory);
+        ? articles
+        : articles.filter(art => art.category === activeCategory);
 
     // Neon Glow Color Maps by Category
     const getGlowStyles = (category: string) => {

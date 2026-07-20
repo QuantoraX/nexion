@@ -1,8 +1,71 @@
-
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import { getContactSubmissions, saveContactSubmissions, ContactSubmission } from "../data/data";
 import contactBg from "../assets/contact-bg.png";
 
 export function Contact() {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        serviceNeeded: "",
+        message: ""
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!formData.name || !formData.email || !formData.serviceNeeded || !formData.message) {
+            toast.error("Please fill in all required fields.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        const submissions = getContactSubmissions();
+        const newSub: ContactSubmission = {
+            id: Date.now().toString(),
+            name: formData.name,
+            email: formData.email,
+            company: "None (Homepage Form)",
+            budget: "Not Specified",
+            projectType: formData.serviceNeeded,
+            message: formData.phone ? `Phone: ${formData.phone}\n\n${formData.message}` : formData.message,
+            date: new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }),
+            status: "new"
+        };
+        submissions.unshift(newSub);
+        saveContactSubmissions(submissions);
+
+        setTimeout(() => {
+            setIsSubmitting(false);
+            toast.success("Thank you! We've received your request.", {
+                style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" },
+                iconTheme: { primary: "#10b981", secondary: "#18181b" }
+            });
+            setFormData({
+                name: "",
+                email: "",
+                phone: "",
+                serviceNeeded: "",
+                message: ""
+            });
+        }, 1200);
+    };
+
     return (
         <section className="py-20 w-full flex items-center justify-center">
             <div className="max-w-5xl w-full mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -32,7 +95,7 @@ export function Contact() {
                     </motion.h2>
 
                     {/* Form */}
-                    <form className="mt-15 flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+                    <form className="mt-15 flex flex-col gap-6" onSubmit={handleSubmit}>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {/* Name */}
                             <div className="flex flex-col">
@@ -42,9 +105,15 @@ export function Contact() {
                                     viewport={{ once: true }}
                                     transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    YOUR NAME
+                                    YOUR NAME *
                                 </motion.label>
-                                <motion.input type="text" placeholder="Michael Anderson" className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
+                                <motion.input 
+                                    type="text" 
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    placeholder="Michael Anderson" 
+                                    className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
                                     initial={{ y: 50, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
@@ -60,9 +129,15 @@ export function Contact() {
                                     viewport={{ once: true }}
                                     transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    EMAIL ADDRESS
+                                    EMAIL ADDRESS *
                                 </motion.label>
-                                <motion.input type="email" placeholder="michael@company.com" className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
+                                <motion.input 
+                                    type="email" 
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="michael@company.com" 
+                                    className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
                                     initial={{ y: 50, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
@@ -82,7 +157,13 @@ export function Contact() {
                                 >
                                     PHONE NUMBER
                                 </motion.label>
-                                <motion.input type="tel" placeholder="E.g. +1 234 567 8900" className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
+                                <motion.input 
+                                    type="tel" 
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleInputChange}
+                                    placeholder="E.g. +1 234 567 8900" 
+                                    className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors" 
                                     initial={{ y: 50, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
@@ -98,11 +179,13 @@ export function Contact() {
                                     viewport={{ once: true }}
                                     transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    SERVICE NEEDED
+                                    SERVICE NEEDED *
                                 </motion.label>
                                 <motion.select
-                                    className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 bg-white focus:outline-none focus:border-zinc-300 transition-colors cursor-pointer appearance-none"
-                                    defaultValue=""
+                                    name="serviceNeeded"
+                                    value={formData.serviceNeeded}
+                                    onChange={handleInputChange}
+                                    className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 bg-white focus:outline-none focus:border-zinc-300 transition-colors cursor-pointer appearance-none animate-none"
                                     initial={{ y: 50, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
@@ -125,9 +208,15 @@ export function Contact() {
                                 viewport={{ once: true }}
                                 transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                             >
-                                MESSAGE
+                                MESSAGE *
                             </motion.label>
-                            <motion.textarea rows={4} placeholder="Tell us about your project, goals, or challenges..." className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors resize-none" 
+                            <motion.textarea 
+                                name="message"
+                                value={formData.message}
+                                onChange={handleInputChange}
+                                rows={4} 
+                                placeholder="Tell us about your project, goals, or challenges..." 
+                                className="w-full border border-zinc-200 rounded-sm px-4 py-2.5 text-xs text-zinc-800 placeholder-zinc-400 focus:outline-none focus:border-zinc-300 transition-colors resize-none" 
                                 initial={{ y: 50, opacity: 0 }}
                                 whileInView={{ y: 0, opacity: 1 }}
                                 viewport={{ once: true }}
@@ -142,8 +231,12 @@ export function Contact() {
                             viewport={{ once: true }}
                             transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                         >
-                            <button type="submit" className="bg-black hover:bg-zinc-900 text-white text-xs px-6 py-3.5 rounded-full transition-colors duration-200 cursor-pointer">
-                                SEND MESSAGE
+                            <button 
+                                type="submit" 
+                                disabled={isSubmitting}
+                                className="bg-black hover:bg-zinc-900 text-white text-xs px-6 py-3.5 rounded-full transition-colors duration-200 cursor-pointer disabled:opacity-50"
+                            >
+                                {isSubmitting ? "SENDING..." : "SEND MESSAGE"}
                             </button>
                         </motion.div>
                     </form>
@@ -181,4 +274,3 @@ export function Contact() {
         </section>
     );
 }
-

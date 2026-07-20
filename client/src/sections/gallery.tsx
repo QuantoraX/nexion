@@ -1,19 +1,24 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { portfolioProjects } from "../data/portfolio-data";
-
-// Double list to keep horizontal track width for horizontal scroll experience
-const displayProjects = [...portfolioProjects, ...portfolioProjects];
+import { getPortfolioProjects, PortfolioProject } from "../data/portfolio-data";
 
 export function Gallery() {
+    const [projects, setProjects] = useState<PortfolioProject[]>([]);
     const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        setProjects(getPortfolioProjects());
+    }, []);
+
+    // Double list to keep horizontal track width for horizontal scroll experience
+    const displayProjects = [...projects, ...projects];
+
+    useEffect(() => {
         const container = containerRef.current;
         const track = trackRef.current;
-        if (!container || !track) return;
+        if (!container || !track || displayProjects.length === 0) return;
 
         const handleScroll = () => {
             const rect = container.getBoundingClientRect();
@@ -45,7 +50,7 @@ export function Gallery() {
             window.removeEventListener("resize", handleScroll);
             clearTimeout(timer);
         };
-    }, []);
+    }, [displayProjects.length]);
 
     return (
         <section ref={containerRef} className="relative h-[220vh] w-full">
@@ -93,7 +98,7 @@ export function Gallery() {
                         <Link 
                             key={index} 
                             to={`/portfolio/${project.slug}`}
-                            className="relative w-80 h-96 shrink-0 overflow-hidden rounded-2xl group cursor-pointer block"
+                            className="relative w-80 h-96 shrink-0 overflow-hidden rounded-2xl group cursor-pointer block shadow-lg border border-zinc-100"
                         >
                             <img
                                 src={project.src}
