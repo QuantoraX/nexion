@@ -8,28 +8,21 @@ import {
     Eye, 
     Clock, 
     DollarSign, 
-    Layers 
+    Layers
 } from "lucide-react";
-import toast from "react-hot-toast";
-
-// Local storage schema tools
-import { getContactSubmissions, saveContactSubmissions, ContactSubmission } from "../../data/data";
+import { useAppContext, ContactSubmission } from "../../context/appContext";
 
 export default function Contact() {
-    const [inquiries, setInquiries] = useState<ContactSubmission[]>([]);
+    const { 
+        inquiries, 
+        toggleInquiryStatus, 
+        deleteInquiry 
+    } = useAppContext();
+
     const [filteredInquiries, setFilteredInquiries] = useState<ContactSubmission[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [activeTab, setActiveTab] = useState<"all" | "new" | "read">("all");
     const [viewInquiry, setViewInquiry] = useState<ContactSubmission | null>(null);
-
-    const loadInbox = () => {
-        const data = getContactSubmissions();
-        setInquiries(data);
-    };
-
-    useEffect(() => {
-        loadInbox();
-    }, []);
 
     // Filter and search logic
     useEffect(() => {
@@ -59,44 +52,24 @@ export default function Contact() {
     // View Message
     const openMessage = (inq: ContactSubmission) => {
         setViewInquiry(inq);
-        
-        // Auto-mark as read
-        if (inq.status === "new") {
-            const updated = inquiries.map(item => {
-                if (item.id === inq.id) {
-                    return { ...item, status: "read" as const };
-                }
-                return item;
-            });
-            saveContactSubmissions(updated);
-            setInquiries(updated);
+        const id = inq._id || inq.id;
+        if (inq.status === "new" && id) {
+            toggleInquiryStatus(id);
         }
     };
 
     // Toggle read/unread state manually
-    const toggleRead = (id: string, currentStatus: "new" | "read" | "replied") => {
-        const updated = inquiries.map(item => {
-            if (item.id === id) {
-                return { 
-                    ...item, 
-                    status: currentStatus === "new" ? ("read" as const) : ("new" as const) 
-                };
-            }
-            return item;
-        });
-        saveContactSubmissions(updated);
-        setInquiries(updated);
-        toast.success("Message status updated.");
+    const toggleRead = (id?: string) => {
+        if (!id) return;
+        toggleInquiryStatus(id);
     };
 
     // Delete submission
-    const deleteMessage = (id: string) => {
+    const deleteMessage = (id?: string) => {
+        if (!id) return;
         if (!window.confirm("Are you sure you want to permanently delete this message?")) return;
-        const updated = inquiries.filter(item => item.id !== id);
-        saveContactSubmissions(updated);
-        setInquiries(updated);
-        toast.success("Message deleted successfully.");
-        if (viewInquiry?.id === id) {
+        deleteInquiry(id);
+        if (viewInquiry && (viewInquiry._id === id || viewInquiry.id === id)) {
             setViewInquiry(null);
         }
     };
@@ -112,41 +85,41 @@ export default function Contact() {
             </div>
 
             {/* Filter and Search Bar Row */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-zinc-900/10 border border-zinc-900 p-4 rounded-xl">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-zinc-900/60 border border-zinc-700/60 p-4 rounded-2xl shadow-md">
                 {/* Search */}
                 <div className="relative w-full md:w-80">
-                    <Search className="absolute left-3 top-2.5 size-4 text-zinc-650" />
+                    <Search className="absolute left-3 top-2.5 size-4 text-zinc-400" />
                     <input
                         type="text"
                         placeholder="Search name, email, keyword..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 focus:border-zinc-700 text-zinc-150 rounded-lg pl-10 pr-4 py-2 text-xs focus:outline-none placeholder-zinc-600 transition-colors"
+                        className="w-full bg-zinc-950/80 border border-zinc-750 hover:border-zinc-650 focus:border-zinc-500 text-zinc-100 rounded-xl pl-10 pr-4 py-2 text-xs focus:outline-none placeholder-zinc-500 transition-colors"
                     />
                 </div>
 
                 {/* Tabs */}
-                <div className="flex items-center gap-1.5 p-1 bg-zinc-950 border border-zinc-850 rounded-lg">
+                <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 border border-zinc-800 rounded-xl">
                     <button
                         onClick={() => setActiveTab("all")}
-                        className={`px-4 py-1.5 rounded-md text-xs font-semibold cursor-pointer transition-all ${
-                            activeTab === "all" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:text-zinc-300"
+                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                            activeTab === "all" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
                         All ({inquiries.length})
                     </button>
                     <button
                         onClick={() => setActiveTab("new")}
-                        className={`px-4 py-1.5 rounded-md text-xs font-semibold cursor-pointer transition-all ${
-                            activeTab === "new" ? "bg-zinc-900 text-emerald-400" : "text-zinc-500 hover:text-zinc-300"
+                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                            activeTab === "new" ? "bg-zinc-800 text-emerald-400 shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
                         Unread ({inquiries.filter(i => i.status === "new").length})
                     </button>
                     <button
                         onClick={() => setActiveTab("read")}
-                        className={`px-4 py-1.5 rounded-md text-xs font-semibold cursor-pointer transition-all ${
-                            activeTab === "read" ? "bg-zinc-900 text-white" : "text-zinc-500 hover:text-zinc-300"
+                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                            activeTab === "read" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
                         Read ({inquiries.filter(i => i.status !== "new").length})
@@ -156,15 +129,15 @@ export default function Contact() {
 
             {/* Inquiries List */}
             {filteredInquiries.length === 0 ? (
-                <div className="py-20 text-center border border-dashed border-zinc-900 rounded-2xl bg-zinc-900/10">
-                    <Mail size={32} className="text-zinc-700 mx-auto mb-3" />
-                    <h3 className="text-zinc-400 text-xs font-medium">No messages found</h3>
-                    <p className="text-zinc-600 text-[10px] mt-1">Adjust search parameters or filters.</p>
+                <div className="py-20 text-center border border-dashed border-zinc-700/60 rounded-2xl bg-zinc-900/40">
+                    <Mail size={32} className="text-zinc-600 mx-auto mb-3" />
+                    <h3 className="text-zinc-300 text-xs font-semibold">No messages found</h3>
+                    <p className="text-zinc-500 text-[10px] mt-1">Adjust search parameters or filters.</p>
                 </div>
             ) : (
-                <div className="bg-zinc-900/10 border border-zinc-900 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-zinc-900/60 border border-zinc-700/60 rounded-2xl overflow-hidden shadow-lg">
                     {/* Header Columns for Desktop */}
-                    <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3.5 bg-zinc-950/60 border-b border-zinc-900 text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                    <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3.5 bg-zinc-950/80 border-b border-zinc-800 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
                         <div className="col-span-1">Status</div>
                         <div className="col-span-3">Sender</div>
                         <div className="col-span-2">Project Type</div>
@@ -174,7 +147,7 @@ export default function Contact() {
                     </div>
 
                     {/* Rows */}
-                    <div className="flex flex-col divide-y divide-zinc-900">
+                    <div className="flex flex-col divide-y divide-zinc-800/80">
                         {filteredInquiries.map((inq) => (
                             <div 
                                 key={inq.id}
@@ -232,7 +205,7 @@ export default function Contact() {
                                         <Eye size={12} />
                                     </button>
                                     <button 
-                                        onClick={() => toggleRead(inq.id, inq.status)}
+                                        onClick={() => toggleRead(inq._id || inq.id)}
                                         title={inq.status === "new" ? "Mark read" : "Mark unread"}
                                         className={`size-7 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
                                             inq.status === "new"
@@ -243,7 +216,7 @@ export default function Contact() {
                                         {inq.status === "new" ? <Square size={12} /> : <CheckSquare size={12} />}
                                     </button>
                                     <button 
-                                        onClick={() => deleteMessage(inq.id)}
+                                        onClick={() => deleteMessage(inq._id || inq.id)}
                                         title="Delete Permanently"
                                         className="size-7 rounded-lg bg-zinc-950 hover:bg-red-950 border border-zinc-900 hover:border-red-900 flex items-center justify-center text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
                                     >

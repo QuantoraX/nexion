@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Plus, Edit2, Trash2, X, BookOpen, Clock, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
-
-// Database operations
-import { getBlogArticles, saveBlogArticles, blogCategories, BlogArticle } from "../../data/blog-data";
+import { blogCategories } from "../../data/blog-data";
+import { useAppContext, BlogArticle } from "../../context/appContext";
 
 export default function AddBlogs() {
-    const [articles, setArticles] = useState<BlogArticle[]>([]);
+    const { 
+        blogs: articles, 
+        addBlog, 
+        updateBlog, 
+        deleteBlog 
+    } = useAppContext();
+
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingArticle, setEditingArticle] = useState<BlogArticle | null>(null);
 
@@ -15,22 +20,15 @@ export default function AddBlogs() {
     const [category, setCategory] = useState("Engineering");
     const [excerpt, setExcerpt] = useState("");
     const [content, setContent] = useState(""); // Separated by double newlines in form textarea
-
-    const loadArticles = () => {
-        setArticles(getBlogArticles());
-    };
-
-    useEffect(() => {
-        loadArticles();
-    }, []);
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     // Auto-generate slug from title
     const generateSlug = (text: string) => {
         return text
             .toLowerCase()
-            .replace(/[^\w\s-]/g, "") // Remove special characters
-            .replace(/[\s_]+/g, "-")  // Replace spaces/underscores with hyphens
-            .replace(/^-+|-+$/g, ""); // Trim hyphens
+            .replace(/[^\w\s-]/g, "")
+            .replace(/[\s_]+/g, "-")
+            .replace(/^-+|-+$/g, "");
     };
 
     // Auto-calculate read time based on word counts
@@ -48,6 +46,7 @@ export default function AddBlogs() {
         setCategory("Engineering");
         setExcerpt("");
         setContent("");
+        setImageFile(null);
         setIsFormOpen(true);
     };
 
@@ -57,13 +56,13 @@ export default function AddBlogs() {
         setTitle(art.title);
         setCategory(art.category);
         setExcerpt(art.excerpt);
-        // Combine paragraphs by double newlines for editing
         setContent(art.content.join("\n\n"));
+        setImageFile(null);
         setIsFormOpen(true);
     };
 
     // Form submission
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!title || !category || !excerpt || !content) {
@@ -71,71 +70,33 @@ export default function AddBlogs() {
             return;
         }
 
-        // Split text content area into paragraph lists, filtering empty ones
-        const contentParagraphs = content
-            .split("\n\n")
-            .map(p => p.trim())
-            .filter(p => p.length > 0);
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("category", category);
+        formData.append("excerpt", excerpt);
+        formData.append("content", content);
 
-        const readTimeCalculated = calculateReadTime(content);
-        const slugGenerated = generateSlug(title);
-
-        let updatedArticles = [...articles];
-
-        if (editingArticle) {
-            // EDIT ACTION
-            updatedArticles = updatedArticles.map(art => {
-                if (art.slug === editingArticle.slug) {
-                    return {
-                        ...art,
-                        slug: slugGenerated, // Regenerate slug if title changed
-                        category,
-                        readTime: readTimeCalculated,
-                        title,
-                        excerpt,
-                        content: contentParagraphs
-                    };
-                }
-                return art;
-            });
-            toast.success("Blog article updated.");
-        } else {
-            // CREATE ACTION
-            // Check for duplicate slug
-            if (updatedArticles.some(a => a.slug === slugGenerated)) {
-                toast.error("An article with this title already exists.");
-                return;
-            }
-
-            const newArticle: BlogArticle = {
-                slug: slugGenerated,
-                category,
-                readTime: readTimeCalculated,
-                date: new Date().toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "2-digit",
-                    year: "numeric"
-                }),
-                title,
-                excerpt,
-                content: contentParagraphs
-            };
-            updatedArticles.unshift(newArticle);
-            toast.success("Blog article published.");
+        if (imageFile) {
+            formData.append("image", imageFile);
         }
 
-        saveBlogArticles(updatedArticles);
-        loadArticles();
-        setIsFormOpen(false);
+        let success = false;
+        if (editingArticle && editingArticle._id) {
+            success = await updateBlog(editingArticle._id, formData);
+        } else {
+            success = await addBlog(formData);
+        }
+
+        if (success) {
+            setIsFormOpen(false);
+        }
     };
 
-    // Delete Blog Post
-    const handleDelete = (slug: string) => {
-        if (!window.confirm("Are you sure you want to permanently delete this article?")) return;
-        const updated = articles.filter(a => a.slug !== slug);
-        saveBlogArticles(updated);
-        loadArticles();
-        toast.success("Article deleted successfully.");
+    // Delete blog article
+    const handleDelete = async (id?: string) => {
+        if (!id) return;
+        if (!window.confirm("Are you sure you want to delete this article?")) return;
+        await deleteBlog(id);
     };
 
     const getBadgeStyles = (cat: string) => {
@@ -167,22 +128,22 @@ export default function AddBlogs() {
 
             {/* Articles List */}
             {articles.length === 0 ? (
-                <div className="py-20 text-center border border-dashed border-zinc-900 rounded-2xl bg-zinc-900/10">
-                    <BookOpen size={32} className="text-zinc-700 mx-auto mb-3" />
-                    <h3 className="text-zinc-400 text-xs font-medium">No published articles</h3>
-                    <p className="text-zinc-650 text-[10px] mt-1">Click the publish button to draft your first article.</p>
+                <div className="py-20 text-center border border-dashed border-zinc-700/60 rounded-2xl bg-zinc-900/40">
+                    <BookOpen size={32} className="text-zinc-600 mx-auto mb-3" />
+                    <h3 className="text-zinc-300 text-xs font-semibold">No published articles</h3>
+                    <p className="text-zinc-500 text-[10px] mt-1">Click the publish button to draft your first article.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     {articles.map((art) => (
-                        <div key={art.slug} className="bg-zinc-900/30 border border-zinc-900 rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-850 transition-colors gap-6 relative group shadow-sm">
+                        <div key={art.slug} className="bg-zinc-900/60 border border-zinc-700/60 rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-500/80 transition-all gap-6 relative group shadow-lg">
                             <div className="flex flex-col gap-4">
                                 {/* Metadata headers */}
                                 <div className="flex items-center justify-between gap-4 pr-16">
                                     <span className={`text-[9px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md border ${getBadgeStyles(art.category)}`}>
                                         {art.category}
                                     </span>
-                                    <div className="flex items-center gap-3 text-[10px] text-zinc-500">
+                                    <div className="flex items-center gap-3 text-[10px] text-zinc-400 font-medium">
                                         <span className="flex items-center gap-1">
                                             <Calendar size={11} />
                                             <span>{art.date}</span>
@@ -197,13 +158,13 @@ export default function AddBlogs() {
 
                                 {/* Article details */}
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="text-sm font-semibold text-white group-hover:text-zinc-200 transition-colors leading-tight">
+                                    <h3 className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors leading-tight">
                                         {art.title}
                                     </h3>
-                                    <p className="text-zinc-500 text-xs leading-relaxed line-clamp-3">
+                                    <p className="text-zinc-300 text-xs leading-relaxed line-clamp-3">
                                         {art.excerpt}
                                     </p>
-                                    <span className="text-[9px] text-zinc-600 mt-1 uppercase font-semibold tracking-wider">
+                                    <span className="text-[9px] text-zinc-400 mt-1 uppercase font-semibold tracking-wider">
                                         {art.content.length} paragraphs written
                                     </span>
                                 </div>
@@ -231,7 +192,7 @@ export default function AddBlogs() {
                                     <Edit2 size={11} />
                                 </button>
                                 <button 
-                                    onClick={() => handleDelete(art.slug)}
+                                    onClick={() => handleDelete(art._id || art.slug)}
                                     title="Delete permanently"
                                     className="size-7 rounded bg-zinc-950 border border-zinc-900 hover:border-red-950 flex items-center justify-center text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
                                 >
@@ -266,26 +227,26 @@ export default function AddBlogs() {
                             <div className="p-6 flex flex-col gap-4">
                                 {/* Title */}
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-500 uppercase">Article Title *</label>
+                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">Article Title *</label>
                                     <input
                                         type="text"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         placeholder="E.g. Building Scalable Web Apps with React 19"
-                                        className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 focus:border-zinc-700 text-zinc-150 rounded-lg px-4 py-2 text-xs focus:outline-none placeholder-zinc-650 transition-colors"
+                                        className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-4 py-2.5 text-xs focus:outline-none placeholder-zinc-500 transition-all"
                                     />
                                     {title && (
-                                        <span className="text-[9px] text-zinc-500">Slug path: <code className="text-zinc-400">/blog/{generateSlug(title)}</code></span>
+                                        <span className="text-[9px] text-zinc-400">Slug path: <code className="text-indigo-400">/blog/{generateSlug(title)}</code></span>
                                     )}
                                 </div>
 
                                 {/* Category */}
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-500 uppercase">Category *</label>
+                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">Category *</label>
                                     <select
                                         value={category}
                                         onChange={(e) => setCategory(e.target.value)}
-                                        className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 focus:border-zinc-700 text-zinc-150 rounded-lg px-4 py-2 text-xs focus:outline-none cursor-pointer"
+                                        className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-4 py-2.5 text-xs focus:outline-none cursor-pointer"
                                     >
                                         {blogCategories.filter(c => c !== "All").map(c => (
                                             <option key={c} value={c}>{c}</option>
@@ -295,22 +256,22 @@ export default function AddBlogs() {
 
                                 {/* Excerpt */}
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-500 uppercase">Summary Excerpt *</label>
+                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">Summary Excerpt *</label>
                                     <textarea
                                         value={excerpt}
                                         onChange={(e) => setExcerpt(e.target.value)}
                                         rows={2}
                                         placeholder="Provide a short excerpt explaining what the article covers..."
-                                        className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 focus:border-zinc-700 text-zinc-150 rounded-lg px-4 py-2 text-xs focus:outline-none placeholder-zinc-650 transition-colors resize-none"
+                                        className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-4 py-2.5 text-xs focus:outline-none placeholder-zinc-500 transition-all resize-none"
                                     />
                                 </div>
 
                                 {/* Content Paragraphs */}
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center justify-between">
-                                        <label className="text-[10px] font-semibold tracking-widest text-zinc-500 uppercase">Article Content *</label>
+                                        <label className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">Article Content *</label>
                                         {content && (
-                                            <span className="text-[9px] text-zinc-500">{calculateReadTime(content)} calculated</span>
+                                            <span className="text-[9px] text-zinc-400">{calculateReadTime(content)} calculated</span>
                                         )}
                                     </div>
                                     <textarea
@@ -318,9 +279,9 @@ export default function AddBlogs() {
                                         onChange={(e) => setContent(e.target.value)}
                                         rows={8}
                                         placeholder="Write paragraphs here. IMPORTANT: Separate each paragraph by a double enter (double line break) to keep layout split correctly. To make a section subheader, end the paragraph line with a colon (:)."
-                                        className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 focus:border-zinc-700 text-zinc-150 rounded-lg p-4 text-xs focus:outline-none placeholder-zinc-650 transition-colors resize-y min-h-[160px]"
+                                        className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl p-4 text-xs focus:outline-none placeholder-zinc-500 transition-all resize-y min-h-40"
                                     />
-                                    <span className="text-[9px] text-zinc-550 leading-relaxed">
+                                    <span className="text-[9px] text-zinc-500 leading-relaxed">
                                         Tip: Paragraphs ending with a colon (e.g. "Key Architectural Patterns:") render as bold headers on the details page.
                                     </span>
                                 </div>
