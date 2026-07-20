@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import Slidebar from "./slidebar";
 import Navbar from "./navbar";
+import { useAppContext } from "../context/appContext";
 
 export default function AdminLayout() {
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const { isAdminLoggedIn, adminToken } = useAppContext();
 
-    useEffect(() => {
-        const auth = localStorage.getItem("nexion_auth") === "true";
-        setIsAuthenticated(auth);
-    }, []);
+    // Strict Auth Check: Check both React context state and localStorage token
+    const hasValidToken = isAdminLoggedIn && !!adminToken && !!localStorage.getItem("nexion_auth_token");
 
-    // Show loading state while checking authentication
-    if (isAuthenticated === null) {
-        return (
-            <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-500 text-xs tracking-widest uppercase">
-                Verifying authorization credentials...
-            </div>
-        );
-    }
-
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-        return <Navigate to="/admin/login" replace />;
+    // Redirect unauthenticated visitors to public home
+    if (!hasValidToken) {
+        return <Navigate to="/" replace />;
     }
 
     return (

@@ -49,10 +49,11 @@ export default function Slidebar() {
 
     const handleLogout = () => {
         localStorage.removeItem("nexion_auth");
+        localStorage.removeItem("nexion_auth_token");
         toast.success("Successfully logged out.", {
             style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" }
         });
-        navigate("/admin/login");
+        navigate("/cms_dash");
     };
 
     return (

@@ -99,6 +99,9 @@ interface AppContextType {
     toggleInquiryStatus: (id: string) => Promise<boolean>;
     replyInquiry: (id: string, replyMessage: string) => Promise<boolean>;
     deleteInquiry: (id: string) => Promise<boolean>;
+
+    // AI Chatbot
+    sendChatMessage: (messages: { role: string; content: string }[]) => Promise<string>;
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -580,6 +583,24 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         }
     };
 
+    /* ─── 6. AI Chatbot Action ─────────────────────────────────────────── */
+    const sendChatMessage = async (messages: { role: string; content: string }[]): Promise<string> => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/chat`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages })
+            });
+            const data = await res.json();
+            if (res.ok && data.reply) {
+                return data.reply;
+            }
+            return data.message || "I am currently unable to process your request. Please try again shortly.";
+        } catch {
+            return "Unable to connect to the assistant server. Please check your internet connection.";
+        }
+    };
+
     return (
         <AppContext.Provider
             value={{
@@ -617,7 +638,9 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
                 submitInquiry,
                 toggleInquiryStatus,
                 replyInquiry,
-                deleteInquiry
+                deleteInquiry,
+
+                sendChatMessage
             }}
         >
             {children}

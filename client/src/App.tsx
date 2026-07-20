@@ -21,12 +21,15 @@ import TestimonialsAdmin from "./admin/pages/textimonials";
 import AddBlogs from "./admin/pages/addblogs";
 import AddPortfolio from "./admin/pages/addprotofile";
 
+import { Chatbot } from "./components/chatbot";
+
 function FrontendLayout() {
   return (
     <>
       <LenisScroll />
       <Navbar />
       <Outlet />
+      <Chatbot />
       <Footer />
     </>
   );
@@ -49,8 +52,8 @@ function App() {
           <Route path="/blog/:slug" element={<BlogDetails />} />
         </Route>
 
-        {/* Admin Login - Hides Main Header/Footer */}
-        <Route path="/admin/login" element={<Login />} />
+        {/* Secret Admin Login Route */}
+        <Route path="/cms_dash" element={<Login />} />
 
         {/* Protected Dashboard Admin Space */}
         <Route path="/admin" element={<AdminLayout />}>

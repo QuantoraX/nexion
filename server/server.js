@@ -13,6 +13,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const portfolioRoutes = require("./routes/portfolioRoutes");
 const testimonialRoutes = require("./routes/testimonialRoutes");
 const inquiryRoutes = require("./routes/inquiryRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 // Instantiate Express
 const app = express();
@@ -42,6 +43,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/inquiries", inquiryRoutes);
+app.use("/api/chat", chatRoutes);
 
 // Root endpoint for browser testing
 app.get("/", (req, res) => {

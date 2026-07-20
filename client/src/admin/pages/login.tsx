@@ -2,21 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, User, Terminal, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAppContext } from "../../context/appContext";
 
 export default function Login() {
     const navigate = useNavigate();
+    const { loginAdmin, isAdminLoggedIn } = useAppContext();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    // Redirect if already logged in
+    // Redirect if already logged in with valid token
     useEffect(() => {
-        if (localStorage.getItem("nexion_auth") === "true") {
+        if (isAdminLoggedIn && !!localStorage.getItem("nexion_auth_token")) {
             navigate("/admin/dashboard");
         }
-    }, [navigate]);
+    }, [isAdminLoggedIn, navigate]);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (!username || !password) {
@@ -26,21 +28,12 @@ export default function Login() {
 
         setIsLoading(true);
 
-        setTimeout(() => {
-            if (username === "admin" && password === "nexion2026") {
-                localStorage.setItem("nexion_auth", "true");
-                toast.success("Welcome back, Admin!", {
-                    style: { borderRadius: "12px", background: "#18181b", color: "#fafafa", border: "1px solid #3f3f46" },
-                    iconTheme: { primary: "#10b981", secondary: "#18181b" }
-                });
-                navigate("/admin/dashboard");
-            } else {
-                setIsLoading(false);
-                toast.error("Invalid credentials. Try again.", {
-                    style: { borderRadius: "12px", background: "#18181b", color: "#ef4444", border: "1px solid #3f3f46" }
-                });
-            }
-        }, 1000);
+        const success = await loginAdmin(username, password);
+        setIsLoading(false);
+
+        if (success) {
+            navigate("/admin/dashboard");
+        }
     };
 
     return (
