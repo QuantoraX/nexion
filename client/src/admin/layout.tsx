@@ -25,7 +25,7 @@ export default function AdminLayout() {
                 <Navbar />
 
                 {/* Workspace Main Outlet */}
-                <main className="flex-1 p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-70px)]">
+                <main className="flex-1 p-6 md:p-8 overflow-y-auto max-h-[calc(100vh-4.375rem)]">
                     <Outlet />
                 </main>
             </div>

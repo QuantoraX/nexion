@@ -61,7 +61,7 @@ export default function Slidebar() {
             {/* Upper Logo / Links Section */}
             <div className="flex flex-col">
                 {/* Brand Logo Header */}
-                <div className="h-[70px] border-b border-zinc-800/80 px-6 flex items-center gap-3">
+                <div className="h-17.5 border-b border-zinc-800/80 px-6 flex items-center gap-3">
                     <div className="size-8 rounded-lg bg-zinc-850 border border-zinc-700/60 flex items-center justify-center text-white shadow-inner">
                         <Terminal size={16} />
                     </div>

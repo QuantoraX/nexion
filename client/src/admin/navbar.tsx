@@ -23,7 +23,7 @@ export default function Navbar() {
     });
 
     return (
-        <header className="h-[70px] border-b border-zinc-800/80 bg-zinc-900/60 backdrop-blur-xl px-6 md:px-8 flex items-center justify-between sticky top-0 z-30 shadow-md">
+        <header className="h-17.5 border-b border-zinc-800/80 bg-zinc-900/60 backdrop-blur-xl px-6 md:px-8 flex items-center justify-between sticky top-0 z-30 shadow-md">
             {/* Title Section */}
             <div className="flex flex-col">
                 <h1 className="text-base font-bold tracking-tight text-white">{getPageTitle()}</h1>
