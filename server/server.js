@@ -43,6 +43,27 @@ app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/inquiries", inquiryRoutes);
 
+// Root endpoint for browser testing
+app.get("/", (req, res) => {
+    res.send(`
+        <div style="font-family: sans-serif; padding: 40px; text-align: center; background: #09090b; color: #fafafa; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1 style="font-size: 32px; margin-bottom: 8px;">🚀 Nexion Solutions Backend API Server</h1>
+            <p style="color: #10b981; font-weight: 600; margin-bottom: 24px;">Status: Online & Connected to MongoDB</p>
+            <div style="background: #18181b; padding: 20px 30px; border-radius: 12px; border: 1px solid #27272a; text-align: left; max-width: 400px; width: 100%;">
+                <p style="margin: 6px 0; color: #a1a1aa; font-size: 14px;"><strong>Active Endpoints:</strong></p>
+                <ul style="color: #60a5fa; font-family: monospace; font-size: 13px; padding-left: 20px; line-height: 1.8;">
+                    <li>/api/auth</li>
+                    <li>/api/blogs</li>
+                    <li>/api/portfolio</li>
+                    <li>/api/testimonials</li>
+                    <li>/api/inquiries</li>
+                    <li>/api/health</li>
+                </ul>
+            </div>
+        </div>
+    `);
+});
+
 // Base ping endpoint
 app.get("/api/health", (req, res) => {
     res.json({ status: "healthy", timestamp: new Date() });
