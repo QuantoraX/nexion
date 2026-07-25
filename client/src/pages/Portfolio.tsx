@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Briefcase, Tag, Globe } from "lucide-react";
 import { portfolioCategories } from "../data/portfolio-data";
 import { useAppContext } from "../context/appContext";
+import portfolioHeroBg from "../assets/profotofilohero.jpg";
 
 /* ─── Main Component ──────────────────────────────────────────────── */
 export default function Portfolio() {
@@ -18,7 +19,7 @@ export default function Portfolio() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
+            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: `url(${portfolioHeroBg})` }}>
                 <div className="absolute inset-0 bg-black/60 pointer-events-none" />
 
                 <motion.div

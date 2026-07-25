@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { projectTypeOptions, contactFaqs } from "../data/contact-data";
 import contactWorkspace from "../assets/contact-workspace.png";
+import contactHeroBg from "../assets/contactus hero.jpg";
 
 /* ─── Animation Variant ─────────────────────────────────────────── */
 const fadeUp = {
@@ -146,7 +147,7 @@ export default function Contactus() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
+            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: `url(${contactHeroBg})` }}>
                 <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 
                 <motion.div

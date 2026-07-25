@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Globe, ChevronRight, ArrowRight, CheckCircle2 } from "lucide-react";
 import aboutTeam from "../assets/about-team.png";
 import aboutMission from "../assets/about-mission.png";
+import aboutHeroBg from "../assets/abouthero.jpg";
 import { TeamSection } from "../sections/team";
 import {
     values,
@@ -38,7 +39,8 @@ export default function About() {
 
             {/* ── 1. HERO ────────────────────────────────────────────── */}
             <section
-                className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center"
+                className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center"
+                style={{ backgroundImage: `url(${aboutHeroBg})` }}
             >
                 <div className="absolute inset-0 bg-black/55 pointer-events-none" />
 
