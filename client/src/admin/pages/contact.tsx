@@ -8,21 +8,32 @@ import {
     Eye, 
     Clock, 
     DollarSign, 
-    Layers
+    Layers,
+    Send,
+    Reply,
+    CheckCircle2,
+    CornerDownRight
 } from "lucide-react";
+import toast from "react-hot-toast";
 import { useAppContext, ContactSubmission } from "../../context/appContext";
 
 export default function Contact() {
     const { 
         inquiries, 
         toggleInquiryStatus, 
+        replyInquiry,
         deleteInquiry 
     } = useAppContext();
 
     const [filteredInquiries, setFilteredInquiries] = useState<ContactSubmission[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeTab, setActiveTab] = useState<"all" | "new" | "read">("all");
+    const [activeTab, setActiveTab] = useState<"all" | "new" | "read" | "replied">("all");
     const [viewInquiry, setViewInquiry] = useState<ContactSubmission | null>(null);
+
+    // Reply state
+    const [isReplyOpen, setIsReplyOpen] = useState(false);
+    const [replyText, setReplyText] = useState("");
+    const [isSending, setIsSending] = useState(false);
 
     // Filter and search logic
     useEffect(() => {
@@ -32,7 +43,9 @@ export default function Contact() {
         if (activeTab === "new") {
             result = result.filter(item => item.status === "new");
         } else if (activeTab === "read") {
-            result = result.filter(item => item.status !== "new");
+            result = result.filter(item => item.status === "read");
+        } else if (activeTab === "replied") {
+            result = result.filter(item => item.status === "replied");
         }
 
         // Apply Search query
@@ -52,10 +65,20 @@ export default function Contact() {
     // View Message
     const openMessage = (inq: ContactSubmission) => {
         setViewInquiry(inq);
+        setIsReplyOpen(false);
+        setReplyText("");
         const id = inq._id || inq.id;
         if (inq.status === "new" && id) {
             toggleInquiryStatus(id);
         }
+    };
+
+    // Open Reply Modal directly
+    const openReplyModal = (inq: ContactSubmission, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        setViewInquiry(inq);
+        setReplyText(`Hi ${inq.name},\n\nThank you for reaching out to Nexion Solutions regarding your project inquiry (${inq.projectType}). We reviewed your details and would love to assist you.\n\nBest regards,\nNexion Team`);
+        setIsReplyOpen(true);
     };
 
     // Toggle read/unread state manually
@@ -71,6 +94,31 @@ export default function Contact() {
         deleteInquiry(id);
         if (viewInquiry && (viewInquiry._id === id || viewInquiry.id === id)) {
             setViewInquiry(null);
+            setIsReplyOpen(false);
+        }
+    };
+
+    // Send email reply
+    const handleSendReply = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!viewInquiry) return;
+        const id = viewInquiry._id || viewInquiry.id;
+        if (!id) return;
+
+        if (!replyText.trim()) {
+            toast.error("Please enter a reply message before sending.");
+            return;
+        }
+
+        setIsSending(true);
+        const success = await replyInquiry(id, replyText.trim());
+        setIsSending(false);
+
+        if (success) {
+            setIsReplyOpen(false);
+            setReplyText("");
+            // Update viewInquiry modal state to show replied status
+            setViewInquiry(prev => prev ? { ...prev, status: "replied", replyMessage: replyText.trim() } : null);
         }
     };
 
@@ -80,7 +128,7 @@ export default function Contact() {
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex flex-col gap-1">
                     <h2 className="text-xl font-medium text-white">Inquiries Inbox</h2>
-                    <p className="text-xs text-zinc-500">Read and process contact requests submitted by potential clients.</p>
+                    <p className="text-xs text-zinc-500">Read, process, and send direct email replies to client submissions (notified to nexionsoft0@gmail.com).</p>
                 </div>
             </div>
 
@@ -102,7 +150,7 @@ export default function Contact() {
                 <div className="flex items-center gap-1.5 p-1 bg-zinc-950/80 border border-zinc-800 rounded-xl">
                     <button
                         onClick={() => setActiveTab("all")}
-                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
                             activeTab === "all" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
@@ -110,19 +158,27 @@ export default function Contact() {
                     </button>
                     <button
                         onClick={() => setActiveTab("new")}
-                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
-                            activeTab === "new" ? "bg-zinc-800 text-emerald-400 shadow-sm" : "text-zinc-400 hover:text-zinc-200"
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                            activeTab === "new" ? "bg-emerald-950 text-emerald-400 border border-emerald-900/50 shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
                         Unread ({inquiries.filter(i => i.status === "new").length})
                     </button>
                     <button
                         onClick={() => setActiveTab("read")}
-                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
                             activeTab === "read" ? "bg-zinc-800 text-white shadow-sm" : "text-zinc-400 hover:text-zinc-200"
                         }`}
                     >
-                        Read ({inquiries.filter(i => i.status !== "new").length})
+                        Read ({inquiries.filter(i => i.status === "read").length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("replied")}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                            activeTab === "replied" ? "bg-indigo-950 text-indigo-400 border border-indigo-900/50 shadow-sm" : "text-zinc-400 hover:text-zinc-200"
+                        }`}
+                    >
+                        Replied ({inquiries.filter(i => i.status === "replied").length})
                     </button>
                 </div>
             </div>
@@ -150,15 +206,19 @@ export default function Contact() {
                     <div className="flex flex-col divide-y divide-zinc-800/80">
                         {filteredInquiries.map((inq) => (
                             <div 
-                                key={inq.id}
-                                className={`grid grid-cols-1 lg:grid-cols-12 gap-4 px-6 py-4 items-center transition-colors hover:bg-zinc-900/20 ${
-                                    inq.status === "new" ? "bg-zinc-900/10" : ""
+                                key={inq.id || inq._id}
+                                className={`grid grid-cols-1 lg:grid-cols-12 gap-4 px-6 py-4 items-center transition-colors hover:bg-zinc-900/40 ${
+                                    inq.status === "new" ? "bg-zinc-900/20" : ""
                                 }`}
                             >
                                 {/* Status badge */}
                                 <div className="col-span-1">
                                     {inq.status === "new" ? (
-                                        <span className="bg-emerald-950/60 border border-emerald-900/50 text-emerald-400 text-[8px] font-bold px-2 py-0.5 rounded-md tracking-wider">NEW</span>
+                                        <span className="bg-emerald-950/80 border border-emerald-800 text-emerald-400 text-[8px] font-bold px-2 py-0.5 rounded-md tracking-wider">NEW</span>
+                                    ) : inq.status === "replied" ? (
+                                        <span className="bg-indigo-950/80 border border-indigo-800 text-indigo-400 text-[8px] font-bold px-2 py-0.5 rounded-md tracking-wider flex items-center gap-1 w-fit">
+                                            <CheckCircle2 size={9} /> REPLIED
+                                        </span>
                                     ) : (
                                         <span className="bg-zinc-900/60 border border-zinc-850 text-zinc-500 text-[8px] font-bold px-2 py-0.5 rounded-md tracking-wider">READ</span>
                                     )}
@@ -166,27 +226,27 @@ export default function Contact() {
 
                                 {/* Sender detail */}
                                 <div className="col-span-3 flex flex-col gap-0.5 min-w-0">
-                                    <span className={`text-xs text-zinc-200 truncate ${inq.status === "new" ? "font-bold text-white" : "font-medium"}`}>
+                                    <span className={`text-xs truncate ${inq.status === "new" ? "font-bold text-white" : "font-medium text-zinc-200"}`}>
                                         {inq.name}
                                     </span>
-                                    <span className="text-[10px] text-zinc-500 truncate">{inq.email}</span>
+                                    <span className="text-[10px] text-zinc-400 truncate">{inq.email}</span>
                                     {inq.company && inq.company !== "None" && inq.company !== "None (Homepage Form)" && (
-                                        <span className="text-[9px] text-zinc-650 truncate">at {inq.company}</span>
+                                        <span className="text-[9px] text-zinc-500 truncate">at {inq.company}</span>
                                     )}
                                 </div>
 
                                 {/* Project Service Type */}
                                 <div className="col-span-2 flex items-center gap-1.5 text-xs text-zinc-300">
-                                    <Layers size={11} className="text-zinc-600" />
-                                    <span className="bg-zinc-950/50 px-2 py-0.5 rounded border border-zinc-900 text-zinc-400 text-[10px] uppercase font-semibold tracking-wider truncate">
+                                    <Layers size={11} className="text-zinc-500" />
+                                    <span className="bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800 text-zinc-300 text-[10px] uppercase font-semibold tracking-wider truncate">
                                         {inq.projectType}
                                     </span>
                                 </div>
 
                                 {/* Budget */}
                                 <div className="col-span-2 flex items-center gap-1 text-xs text-zinc-300">
-                                    <DollarSign size={11} className="text-zinc-600" />
-                                    <span className="truncate">{inq.budget || "Not Specified"}</span>
+                                    <DollarSign size={11} className="text-zinc-500" />
+                                    <span className="truncate text-zinc-400">{inq.budget || "Not Specified"}</span>
                                 </div>
 
                                 {/* Date */}
@@ -198,27 +258,38 @@ export default function Contact() {
                                 {/* Action Buttons */}
                                 <div className="col-span-2 flex items-center justify-end gap-1.5">
                                     <button 
+                                        onClick={(e) => openReplyModal(inq, e)}
+                                        title="Reply Email to Client"
+                                        className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-semibold flex items-center gap-1 transition-colors cursor-pointer shadow-sm"
+                                    >
+                                        <Reply size={11} />
+                                        <span>Reply</span>
+                                    </button>
+
+                                    <button 
                                         onClick={() => openMessage(inq)}
                                         title="Read Full Inquiry"
-                                        className="size-7 rounded-lg bg-zinc-950 hover:bg-zinc-800 border border-zinc-900 hover:border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                                        className="size-7 rounded-lg bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
                                     >
                                         <Eye size={12} />
                                     </button>
+
                                     <button 
                                         onClick={() => toggleRead(inq._id || inq.id)}
                                         title={inq.status === "new" ? "Mark read" : "Mark unread"}
                                         className={`size-7 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
                                             inq.status === "new"
-                                                ? "bg-zinc-950 hover:bg-emerald-950 border-zinc-900 hover:border-emerald-900 text-zinc-500 hover:text-emerald-400"
+                                                ? "bg-zinc-950 hover:bg-emerald-950 border-zinc-800 hover:border-emerald-800 text-zinc-500 hover:text-emerald-400"
                                                 : "bg-emerald-950 border-emerald-900 text-emerald-400"
                                         }`}
                                     >
                                         {inq.status === "new" ? <Square size={12} /> : <CheckSquare size={12} />}
                                     </button>
+
                                     <button 
                                         onClick={() => deleteMessage(inq._id || inq.id)}
                                         title="Delete Permanently"
-                                        className="size-7 rounded-lg bg-zinc-950 hover:bg-red-950 border border-zinc-900 hover:border-red-900 flex items-center justify-center text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
+                                        className="size-7 rounded-lg bg-zinc-950 hover:bg-red-950 border border-zinc-800 hover:border-red-900 flex items-center justify-center text-zinc-500 hover:text-red-400 transition-colors cursor-pointer"
                                     >
                                         <Trash2 size={12} />
                                     </button>
@@ -229,73 +300,138 @@ export default function Contact() {
                 </div>
             )}
 
-            {/* Read Message Overlay Modal */}
+            {/* Read / Reply Overlay Modal */}
             {viewInquiry && (
                 <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
-                    <div className="bg-zinc-900 border border-zinc-850 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
-                        {/* Header */}
-                        <div className="px-6 py-4 bg-zinc-950 border-b border-zinc-850 flex items-center justify-between">
-                            <div className="flex flex-col">
-                                <h3 className="text-sm font-semibold text-white">Contact Inquiry details</h3>
-                                <span className="text-[10px] text-zinc-500">Inquiry ID: {viewInquiry.id} • Pushed on {viewInquiry.date}</span>
+                    <div className="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                        {/* Modal Header */}
+                        <div className="px-6 py-4 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <h3 className="text-sm font-semibold text-white">Contact Inquiry Details</h3>
+                                {viewInquiry.status === "replied" && (
+                                    <span className="bg-indigo-950 border border-indigo-800 text-indigo-300 text-[9px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                        <CheckCircle2 size={10} /> Replied
+                                    </span>
+                                )}
                             </div>
                             <button 
-                                onClick={() => setViewInquiry(null)}
-                                className="text-xs text-zinc-500 hover:text-white px-2 py-1 rounded bg-zinc-900 border border-zinc-800 cursor-pointer"
+                                onClick={() => { setViewInquiry(null); setIsReplyOpen(false); }}
+                                className="text-xs text-zinc-400 hover:text-white px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 cursor-pointer"
                             >
-                                Close Modal
+                                Close
                             </button>
                         </div>
 
-                        {/* Content */}
+                        {/* Modal Content */}
                         <div className="p-6 flex flex-col gap-5 overflow-y-auto">
-                            {/* Meta Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-950/40 p-4 rounded-xl border border-zinc-850 text-xs">
+                            {/* Client Meta Grid */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-zinc-950/60 p-4 rounded-xl border border-zinc-800 text-xs">
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500">Contact Person</span>
-                                    <span className="font-semibold text-zinc-200">{viewInquiry.name}</span>
+                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-semibold">Contact Person</span>
+                                    <span className="font-semibold text-zinc-100">{viewInquiry.name}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500">Email Address</span>
-                                    <span className="font-semibold text-zinc-200 truncate">{viewInquiry.email}</span>
+                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-semibold">Client Email</span>
+                                    <span className="font-semibold text-indigo-400 truncate">{viewInquiry.email}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500">Company Organization</span>
-                                    <span className="font-semibold text-zinc-200">{viewInquiry.company}</span>
+                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-semibold">Company</span>
+                                    <span className="font-medium text-zinc-300">{viewInquiry.company || "Not specified"}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500">Service Category</span>
+                                    <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-semibold">Service Category</span>
                                     <span className="font-bold text-emerald-400 uppercase tracking-widest">{viewInquiry.projectType}</span>
                                 </div>
                             </div>
 
-                            {/* Message Body */}
+                            {/* Client Message Content */}
                             <div className="flex flex-col gap-2">
-                                <span className="text-[9px] uppercase tracking-wider text-zinc-500">Message Content</span>
-                                <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                                <span className="text-[9px] uppercase tracking-wider text-zinc-500 font-semibold">Client Message</span>
+                                <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-xs text-zinc-200 leading-relaxed whitespace-pre-wrap">
                                     {viewInquiry.message}
                                 </div>
                             </div>
+
+                            {/* Previous Reply Sent Display */}
+                            {viewInquiry.replyMessage && (
+                                <div className="flex flex-col gap-2 bg-indigo-950/30 border border-indigo-900/50 p-4 rounded-xl">
+                                    <span className="text-[9px] uppercase tracking-wider text-indigo-400 font-semibold flex items-center gap-1">
+                                        <CornerDownRight size={11} /> Previous Email Reply Sent
+                                    </span>
+                                    <div className="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/70 p-3 rounded-lg border border-indigo-950">
+                                        {viewInquiry.replyMessage}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Direct Email Reply Form Box */}
+                            {isReplyOpen ? (
+                                <form onSubmit={handleSendReply} className="flex flex-col gap-3 bg-zinc-950 p-4 rounded-xl border border-indigo-900/70">
+                                    <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                                        <div className="flex items-center gap-1.5 text-xs text-indigo-400 font-semibold">
+                                            <Send size={13} />
+                                            <span>Send Direct Email to {viewInquiry.email}</span>
+                                        </div>
+                                        <span className="text-[9px] text-zinc-500">From: nexionsoft0@gmail.com</span>
+                                    </div>
+
+                                    <textarea
+                                        value={replyText}
+                                        onChange={(e) => setReplyText(e.target.value)}
+                                        rows={5}
+                                        placeholder="Write your email response here..."
+                                        className="w-full bg-zinc-900 border border-zinc-800 focus:border-indigo-500 text-zinc-100 rounded-lg p-3 text-xs focus:outline-none placeholder-zinc-500 leading-relaxed resize-none"
+                                    />
+
+                                    <div className="flex items-center justify-end gap-2 pt-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsReplyOpen(false)}
+                                            className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white text-xs cursor-pointer"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={isSending}
+                                            className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-50"
+                                        >
+                                            {isSending ? (
+                                                <span>Sending Email...</span>
+                                            ) : (
+                                                <>
+                                                    <Send size={12} />
+                                                    <span>Send Email Reply</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
+                                </form>
+                            ) : null}
                         </div>
 
-                        {/* Footer */}
-                        <div className="px-6 py-4 bg-zinc-950/80 border-t border-zinc-850 flex items-center justify-between">
-                            <span className="text-[10px] text-zinc-500">Project Budget Scope: {viewInquiry.budget}</span>
+                        {/* Modal Footer */}
+                        <div className="px-6 py-4 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between">
+                            <span className="text-[10px] text-zinc-500">Budget Range: {viewInquiry.budget}</span>
                             <div className="flex gap-2">
                                 <button
-                                    onClick={() => deleteMessage(viewInquiry.id)}
-                                    className="bg-zinc-900 border border-zinc-800 hover:border-red-950 hover:bg-red-950/10 text-xs font-semibold px-4 py-2 rounded-lg text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
+                                    onClick={() => deleteMessage(viewInquiry._id || viewInquiry.id)}
+                                    className="bg-zinc-900 border border-zinc-800 hover:border-red-900 hover:bg-red-950/20 text-xs font-semibold px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-red-400 transition-colors cursor-pointer"
                                 >
                                     Delete
                                 </button>
-                                <button
-                                    onClick={() => {
-                                        window.location.href = `mailto:${viewInquiry.email}?subject=Response from Nexion Solutions`;
-                                    }}
-                                    className="bg-white hover:bg-zinc-200 text-black text-xs font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer"
-                                >
-                                    Reply via Mail
-                                </button>
+                                {!isReplyOpen && (
+                                    <button
+                                        onClick={() => {
+                                            setReplyText(`Hi ${viewInquiry.name},\n\nThank you for reaching out to Nexion Solutions regarding your project inquiry (${viewInquiry.projectType}). We reviewed your message and would love to assist you.\n\nBest regards,\nNexion Team`);
+                                            setIsReplyOpen(true);
+                                        }}
+                                        className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
+                                    >
+                                        <Reply size={13} />
+                                        <span>Reply Email</span>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -40,6 +40,13 @@ const InquirySchema = new mongoose.Schema({
         enum: ["new", "read", "replied"],
         default: "new"
     },
+    replyMessage: {
+        type: String,
+        default: ""
+    },
+    repliedAt: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now

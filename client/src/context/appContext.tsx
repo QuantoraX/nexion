@@ -57,6 +57,8 @@ export interface ContactSubmission {
     message: string;
     date: string;
     status: "new" | "read" | "replied";
+    replyMessage?: string;
+    repliedAt?: string;
 }
 
 interface AppContextType {

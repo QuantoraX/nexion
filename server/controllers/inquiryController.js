@@ -85,7 +85,7 @@ const createInquiry = async (req, res) => {
         });
 
         // Trigger email notification to Admin
-        const adminEmail = process.env.EMAIL_TO || "hello@nexion.solutions";
+        const adminEmail = process.env.EMAIL_TO || "nexionsoft0@gmail.com";
         const emailSubject = `🚨 New Nexion Lead: ${name} (${projectType})`;
         const emailBody = `
             <h3>New Inquiry Submitted on Nexion Solutions</h3>
@@ -146,23 +146,32 @@ const replyInquiry = async (req, res) => {
         }
 
         // Send email reply to the client
-        const subject = `Re: Your Inquiry with Nexion Solutions`;
+        const subject = `Re: Your Inquiry with Nexion Solutions - ${inquiry.projectType}`;
         const htmlContent = `
-            <p>Hi ${inquiry.name},</p>
-            <p>Thank you for reaching out to Nexion Solutions regarding your interest in <strong>${inquiry.projectType}</strong>. Here is the response from our team:</p>
-            <div style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 20px; color: #18181b; font-size: 14px; line-height: 1.6; margin: 20px 0;">
-                ${replyMessage.replace(/\n/g, "<br>")}
+            <div style="font-family: Arial, sans-serif; color: #18181b; max-width: 600px; margin: 0 auto; border: 1px solid #e4e4e7; rounded: 12px; overflow: hidden;">
+                <div style="background: #000000; color: #ffffff; padding: 20px; text-align: center;">
+                    <h2 style="margin: 0; font-size: 20px; font-weight: 600;">Nexion Solutions</h2>
+                    <p style="margin: 4px 0 0 0; font-size: 12px; color: #a1a1aa;">Response to Your Inquiry</p>
+                </div>
+                <div style="padding: 24px; background: #ffffff;">
+                    <p style="font-size: 14px; color: #27272a;">Dear <strong>${inquiry.name}</strong>,</p>
+                    <p style="font-size: 14px; color: #3f3f46; line-height: 1.6;">Thank you for contacting Nexion Solutions regarding <strong>${inquiry.projectType}</strong>. Here is our response to your message:</p>
+                    <div style="background: #f4f4f5; border-left: 4px solid #18181b; border-radius: 8px; padding: 16px; font-size: 14px; color: #18181b; line-height: 1.6; margin: 20px 0;">
+                        ${replyMessage.replace(/\n/g, "<br>")}
+                    </div>
+                    <p style="font-size: 13px; color: #71717a;">If you have additional questions or details to share, feel free to reply directly to this email.</p>
+                    <hr style="border: 0; border-top: 1px solid #f4f4f5; margin: 24px 0;" />
+                    <p style="font-size: 12px; color: #a1a1aa; margin: 0;">Warm regards,<br/><strong>Nexion Engineering Team</strong><br/>Nexion Solutions</p>
+                </div>
             </div>
-            <p>If you have any further questions, feel free to reply directly to this email.</p>
-            <br />
-            <p>Best regards,</p>
-            <p><strong>Nexion Solutions Team</strong><br/>Colombo, Sri Lanka · Global Operations</p>
         `;
 
         await sendEmail(subject, htmlContent, inquiry.email);
 
-        // Update inquiry status
+        // Update inquiry status & reply details
         inquiry.status = "replied";
+        inquiry.replyMessage = replyMessage;
+        inquiry.repliedAt = new Date();
         const updated = await inquiry.save();
 
         res.json(updated);
