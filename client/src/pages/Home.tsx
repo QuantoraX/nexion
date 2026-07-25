@@ -4,7 +4,7 @@ import { Gallery } from "../sections/gallery"
 import { WhyChooseUs } from "../sections/why-choose-us"
 import { Testimonials } from "../sections/testimonials"
 import { CallToAction } from "../sections/call-to-action"
-import { Contact } from "../sections/contact"
+import { TeamSection } from "../sections/team"
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <WhyChooseUs />
       <Testimonials />  
       <CallToAction />
-      <Contact />
+      <TeamSection />
     </>
   )
 }

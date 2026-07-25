@@ -24,86 +24,75 @@ export function Footer() {
                     <div className="lg:col-span-5 flex justify-between gap-8 flex-wrap">
                         {/* Explore */}
                         <div className="flex flex-col gap-5">
-                            <span className="text-white">Explore</span>
+                            <span className="text-white font-medium">Explore</span>
                             <div className="flex flex-col gap-3 text-xs text-zinc-300">
                                 <MotionLink to="/" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
+                                    initial={{ y: 20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
                                     Home
                                 </MotionLink>
-                                <MotionLink to="/services" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
+                                <MotionLink to="/about" className="hover:text-white transition-colors duration-200" 
+                                    initial={{ y: 20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
+                                >
+                                    About Us
+                                </MotionLink>
+                                <MotionLink to="/services" className="hover:text-white transition-colors duration-200" 
+                                    initial={{ y: 20, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    viewport={{ once: true }}
                                 >
                                     Services
                                 </MotionLink>
                                 <MotionLink to="/portfolio" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
+                                    initial={{ y: 20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
                                     Portfolio
                                 </MotionLink>
                                 <MotionLink to="/blog" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
+                                    initial={{ y: 20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
                                     Blog
                                 </MotionLink>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    Reviews
-                                </a>
                             </div>
                         </div>
 
-                        {/* Social */}
+                        {/* Company & Support */}
                         <div className="flex flex-col gap-5">
-                            <span className="text-white">Social</span>
+                            <span className="text-white font-medium">Connect</span>
                             <div className="flex flex-col gap-3 text-xs text-zinc-300">
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    Instagram
-                                </a>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    LinkedIn
-                                </a>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    Twitter
-                                </a>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    Facebook
-                                </a>
-                            </div>
-                        </div>
-
-                        {/* Company */}
-                        <div className="flex flex-col gap-5">
-                            <span className="text-white">Company</span>
-                            <div className="flex flex-col gap-3 text-xs text-zinc-300">
-                                <MotionLink to="/about" className="hover:text-white transition-colors duration-200" 
-                                    initial={{ y: 50, opacity: 0 }}
+                                <MotionLink to="/contact" className="hover:text-white transition-colors duration-200 font-semibold text-indigo-400" 
+                                    initial={{ y: 20, opacity: 0 }}
                                     whileInView={{ y: 0, opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: 0.2, type: "spring", stiffness: 320, damping: 70, mass: 1 }}
                                 >
-                                    About Us
+                                    Contact Us →
                                 </MotionLink>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    FAQ
+                                <MotionLink to="/cms_dash" className="hover:text-white transition-colors duration-200 text-zinc-400" 
+                                    initial={{ y: 20, opacity: 0 }}
+                                    whileInView={{ y: 0, opacity: 1 }}
+                                    viewport={{ once: true }}
+                                >
+                                    Admin CMS
+                                </MotionLink>
+                                <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors duration-200">
+                                    LinkedIn
                                 </a>
-                                <a href="#" className="hover:text-white transition-colors duration-200">
-                                    Careers
+                                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors duration-200">
+                                    Twitter / X
+                                </a>
+                                <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors duration-200">
+                                    GitHub
                                 </a>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
