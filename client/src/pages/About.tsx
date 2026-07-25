@@ -133,7 +133,7 @@ export default function About() {
 
                     {/* Image */}
                     <motion.div
-                        className="relative w-full h-96 lg:h-[480px] rounded-xl overflow-hidden"
+                        className="relative w-full h-96 lg:h-120 rounded-xl overflow-hidden"
                         initial={{ opacity: 0, x: 40 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
@@ -214,7 +214,7 @@ export default function About() {
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     {/* Image */}
                     <motion.div
-                        className="relative w-full h-96 lg:h-[480px] rounded-xl overflow-hidden order-2 lg:order-1"
+                        className="relative w-full h-96 lg:h-120 rounded-xl overflow-hidden order-2 lg:order-1"
                         initial={{ opacity: 0, x: -40 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
@@ -289,7 +289,7 @@ export default function About() {
                                 viewport={{ once: true }}
                                 className="relative"
                             >
-                                <span className="absolute left-[-29px] top-1 size-3 rounded-full bg-zinc-900 border-2 border-gray-50" />
+                                <span className="absolute -left-7.25 top-1 size-3 rounded-full bg-zinc-900 border-2 border-gray-50" />
                                 <span className="text-xs text-zinc-400 uppercase tracking-widest font-medium">{m.year}</span>
                                 <p className="text-zinc-600 mt-1 text-sm leading-relaxed">{m.event}</p>
                             </motion.div>
