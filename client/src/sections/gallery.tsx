@@ -1,19 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { getPortfolioProjects, PortfolioProject } from "../data/portfolio-data";
+import { useAppContext } from "../context/appContext";
 
 export function Gallery() {
-    const [projects, setProjects] = useState<PortfolioProject[]>([]);
+    const { projects } = useAppContext();
     const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setProjects(getPortfolioProjects());
-    }, []);
-
     // Double list to keep horizontal track width for horizontal scroll experience
-    const displayProjects = [...projects, ...projects];
+    const displayProjects = projects.length > 0 
+        ? (projects.length < 4 ? [...projects, ...projects, ...projects] : [...projects, ...projects])
+        : [];
 
     useEffect(() => {
         const container = containerRef.current;
