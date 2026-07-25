@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Edit2, Trash2, X, Briefcase, Calendar, ExternalLink } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Briefcase, Calendar, ExternalLink, Camera, Globe, Loader2, Zap } from "lucide-react";
 import toast from "react-hot-toast";
 import { portfolioCategories } from "../../data/portfolio-data";
 import { useAppContext, PortfolioProject } from "../../context/appContext";
@@ -9,7 +9,8 @@ export default function AddProtofile() {
         projects, 
         addProject, 
         updateProject, 
-        deleteProject 
+        deleteProject,
+        captureWebsiteScreenshot 
     } = useAppContext();
 
     const [isFormOpen, setIsFormOpen] = useState(false);
@@ -19,8 +20,10 @@ export default function AddProtofile() {
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("SaaS");
     const [subtitle, setSubtitle] = useState("");
+    const [websiteUrl, setWebsiteUrl] = useState("");
     const [src, setSrc] = useState("");
     const [srcFile, setSrcFile] = useState<File | null>(null);
+    const [isCapturing, setIsCapturing] = useState(false);
     const [client, setClient] = useState("");
     const [date, setDate] = useState("");
     const [overview, setOverview] = useState("");
@@ -42,8 +45,10 @@ export default function AddProtofile() {
         setTitle("");
         setCategory("SaaS");
         setSubtitle("");
+        setWebsiteUrl("");
         setSrc(""); 
         setSrcFile(null);
+        setIsCapturing(false);
         setClient("");
         setDate("");
         setOverview("");
@@ -65,8 +70,10 @@ export default function AddProtofile() {
         setTitle(proj.title);
         setCategory(proj.category);
         setSubtitle(proj.subtitle);
+        setWebsiteUrl(proj.websiteUrl || "");
         setSrc(proj.src);
         setSrcFile(null);
+        setIsCapturing(false);
         setClient(proj.client);
         setDate(proj.date);
         setOverview(proj.overview);
@@ -83,6 +90,21 @@ export default function AddProtofile() {
         setDetDesc3(proj.details?.[2]?.desc || "");
         
         setIsFormOpen(true);
+    };
+
+    // Capture website screenshot automatically & upload to Cloudinary
+    const handleAutoScreenshot = async () => {
+        if (!websiteUrl || !websiteUrl.trim()) {
+            toast.error("Please enter a valid website URL first.");
+            return;
+        }
+        setIsCapturing(true);
+        const imageUrl = await captureWebsiteScreenshot(websiteUrl.trim());
+        setIsCapturing(false);
+        if (imageUrl) {
+            setSrc(imageUrl);
+            setSrcFile(null);
+        }
     };
 
     // Submit handler
@@ -103,6 +125,7 @@ export default function AddProtofile() {
         formData.append("title", title);
         formData.append("category", category);
         formData.append("subtitle", subtitle);
+        formData.append("websiteUrl", websiteUrl);
         formData.append("client", client);
         formData.append("date", date);
         formData.append("overview", overview);
@@ -113,6 +136,8 @@ export default function AddProtofile() {
 
         if (srcFile) {
             formData.append("src", srcFile);
+        } else if (src) {
+            formData.append("src", src);
         }
 
         let success = false;
@@ -200,15 +225,28 @@ export default function AddProtofile() {
                                         <Calendar size={11} />
                                         <span>{proj.date}</span>
                                     </div>
-                                    <a 
-                                        href={`/portfolio/${proj.slug}`} 
-                                        target="_blank" 
-                                        rel="noreferrer" 
-                                        className="hover:text-white flex items-center gap-0.5"
-                                    >
-                                        <span>Case Study</span>
-                                        <ExternalLink size={10} />
-                                    </a>
+                                    <div className="flex items-center gap-3">
+                                        {proj.websiteUrl && (
+                                            <a 
+                                                href={proj.websiteUrl} 
+                                                target="_blank" 
+                                                rel="noreferrer" 
+                                                className="text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5 font-semibold"
+                                            >
+                                                <Globe size={10} />
+                                                <span>Live Site</span>
+                                            </a>
+                                        )}
+                                        <a 
+                                            href={`/portfolio/${proj.slug}`} 
+                                            target="_blank" 
+                                            rel="noreferrer" 
+                                            className="hover:text-white flex items-center gap-0.5"
+                                        >
+                                            <span>Case Study</span>
+                                            <ExternalLink size={10} />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
@@ -296,17 +334,99 @@ export default function AddProtofile() {
                                             className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-3.5 py-2 text-xs focus:outline-none placeholder-zinc-500 transition-all"
                                         />
                                     </div>
+                                    {/* Website URL & Auto Screenshot Generator */}
+                                    <div className="flex flex-col gap-1.5 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] font-semibold text-zinc-300 uppercase flex items-center gap-1">
+                                                <Globe size={12} className="text-indigo-400" />
+                                                <span>Live Website URL</span>
+                                            </label>
+                                            <span className="text-[9px] text-zinc-500 font-normal">Auto Capture Available</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="url"
+                                                value={websiteUrl}
+                                                onChange={(e) => setWebsiteUrl(e.target.value)}
+                                                placeholder="https://example.com"
+                                                className="flex-1 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 focus:border-indigo-500 text-zinc-100 rounded-lg px-3 py-1.5 text-xs focus:outline-none placeholder-zinc-500"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleAutoScreenshot}
+                                                disabled={isCapturing || !websiteUrl.trim()}
+                                                className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[11px] font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shrink-0 cursor-pointer shadow-sm"
+                                            >
+                                                {isCapturing ? (
+                                                    <>
+                                                        <Loader2 size={12} className="animate-spin" />
+                                                        <span>Capturing...</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Zap size={12} />
+                                                        <span>Auto Screenshot</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                        <p className="text-[9px] text-zinc-400 mt-0.5">
+                                            Captures live full-page screenshot of site and uploads to Cloudinary automatically.
+                                        </p>
+                                    </div>
 
-                                    {/* Image Src */}
-                                    <div className="flex flex-col gap-1.5">
-                                        <label className="text-[10px] font-semibold text-zinc-400 uppercase">Image URL (Screenshot Link) *</label>
-                                        <input
-                                            type="url"
-                                            value={src}
-                                            onChange={(e) => setSrc(e.target.value)}
-                                            placeholder="https://images.unsplash.com/..."
-                                            className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-3.5 py-2 text-xs focus:outline-none placeholder-zinc-500 transition-all"
-                                        />
+                                    {/* Image Src / Manual Upload Options */}
+                                    <div className="flex flex-col gap-2 bg-zinc-950/60 p-3 rounded-xl border border-zinc-800/80">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] font-semibold text-zinc-300 uppercase flex items-center gap-1">
+                                                <Camera size={12} className="text-zinc-400" />
+                                                <span>Project Banner / Screenshot Image *</span>
+                                            </label>
+                                            <span className="text-[9px] font-medium text-emerald-400">
+                                                {srcFile ? "File Selected" : src ? "Image Loaded" : "Pending"}
+                                            </span>
+                                        </div>
+
+                                        {/* Live Preview box */}
+                                        {(src || srcFile) && (
+                                            <div className="h-28 w-full rounded-lg overflow-hidden relative border border-zinc-750 bg-black">
+                                                <img 
+                                                    src={srcFile ? URL.createObjectURL(srcFile) : src} 
+                                                    alt="Preview" 
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-xs text-white text-[9px] font-semibold px-2 py-0.5 rounded border border-zinc-700">
+                                                    {srcFile ? "Manual File Upload" : src.includes("cloudinary") ? "Cloudinary Screenshot" : "Custom Image URL"}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Manual File Pick */}
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-[9px] text-zinc-400 font-medium">Option A: Upload Manual Photo File</span>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    if (e.target.files && e.target.files[0]) {
+                                                        setSrcFile(e.target.files[0]);
+                                                    }
+                                                }}
+                                                className="text-[10px] text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
+                                            />
+                                        </div>
+
+                                        {/* Manual URL Input */}
+                                        <div className="flex flex-col gap-1 mt-1">
+                                            <span className="text-[9px] text-zinc-400 font-medium">Option B: Image URL / Cloudinary Link</span>
+                                            <input
+                                                type="url"
+                                                value={src}
+                                                onChange={(e) => setSrc(e.target.value)}
+                                                placeholder="https://res.cloudinary.com/..."
+                                                className="w-full bg-zinc-900 border border-zinc-800 hover:border-zinc-700 focus:border-indigo-500 text-zinc-100 rounded-lg px-3 py-1.5 text-xs focus:outline-none placeholder-zinc-500"
+                                            />
+                                        </div>
                                     </div>
 
                                     {/* Client and Date Grid */}

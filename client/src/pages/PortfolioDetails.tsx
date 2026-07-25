@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
-import { ArrowLeft, ArrowRight, Calendar, User, Layers, CheckCircle2, ShieldAlert } from "lucide-react";
+import { ArrowLeft, ArrowRight, Calendar, User, Layers, CheckCircle2, ShieldAlert, Globe, ExternalLink } from "lucide-react";
 import { useAppContext } from "../context/appContext";
 
 /* ─── Animation Variant ─────────────────────────────────────────── */
@@ -172,6 +172,25 @@ export default function PortfolioDetails() {
                                         <span className="text-sm font-medium text-zinc-800">{project.category}</span>
                                     </div>
                                 </div>
+
+                                {/* Live Website URL if available */}
+                                {project.websiteUrl && (
+                                    <div className="flex gap-3 pt-2">
+                                        <Globe size={18} className="text-indigo-600 shrink-0 mt-0.5" />
+                                        <div>
+                                            <span className="text-[10px] uppercase tracking-wider text-zinc-400 font-semibold block">Live Site</span>
+                                            <a 
+                                                href={project.websiteUrl} 
+                                                target="_blank" 
+                                                rel="noreferrer" 
+                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors mt-0.5"
+                                            >
+                                                <span>Visit Website</span>
+                                                <ExternalLink size={12} />
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className="pt-4 border-t border-zinc-200">

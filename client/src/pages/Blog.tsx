@@ -123,8 +123,20 @@ export default function Blog() {
                                         to={`/blog/${article.slug}`}
                                         className={`group flex flex-col h-full border border-zinc-200 rounded-2xl p-6 md:p-8 bg-white transition-all duration-300 outline-hidden hover:no-underline text-inherit cursor-pointer select-none ${getGlowStyles(article.category)}`}
                                     >
+                                        {/* Cover Image Banner */}
+                                        {article.image && (
+                                            <div className="h-44 md:h-52 w-full overflow-hidden rounded-xl bg-zinc-100 mb-6 border border-zinc-100">
+                                                <img
+                                                    src={article.image}
+                                                    alt={article.title}
+                                                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                        )}
+
                                         {/* Badge and Metadata */}
-                                        <div className="flex items-center justify-between gap-4 mb-6">
+                                        <div className="flex items-center justify-between gap-4 mb-4">
                                             <span className={`text-[10px] font-semibold tracking-wider uppercase px-3 py-1 rounded-full border ${getBadgeStyles(article.category)}`}>
                                                 {article.category}
                                             </span>

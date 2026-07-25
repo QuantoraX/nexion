@@ -70,6 +70,11 @@ const PortfolioSchema = new mongoose.Schema({
         type: [ProjectDetailSchema],
         default: []
     },
+    websiteUrl: {
+        type: String,
+        default: "",
+        trim: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

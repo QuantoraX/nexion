@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Edit2, Trash2, X, BookOpen, Clock, Calendar } from "lucide-react";
+import { Plus, Edit2, Trash2, X, BookOpen, Clock, Calendar, Camera } from "lucide-react";
 import toast from "react-hot-toast";
 import { blogCategories } from "../../data/blog-data";
 import { useAppContext, BlogArticle } from "../../context/appContext";
@@ -20,6 +20,7 @@ export default function AddBlogs() {
     const [category, setCategory] = useState("Engineering");
     const [excerpt, setExcerpt] = useState("");
     const [content, setContent] = useState(""); // Separated by double newlines in form textarea
+    const [image, setImage] = useState("");
     const [imageFile, setImageFile] = useState<File | null>(null);
 
     // Auto-generate slug from title
@@ -46,6 +47,7 @@ export default function AddBlogs() {
         setCategory("Engineering");
         setExcerpt("");
         setContent("");
+        setImage("");
         setImageFile(null);
         setIsFormOpen(true);
     };
@@ -57,6 +59,7 @@ export default function AddBlogs() {
         setCategory(art.category);
         setExcerpt(art.excerpt);
         setContent(art.content.join("\n\n"));
+        setImage(art.image || "");
         setImageFile(null);
         setIsFormOpen(true);
     };
@@ -78,6 +81,8 @@ export default function AddBlogs() {
 
         if (imageFile) {
             formData.append("image", imageFile);
+        } else if (image) {
+            formData.append("image", image);
         }
 
         let success = false;
@@ -136,8 +141,14 @@ export default function AddBlogs() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                     {articles.map((art) => (
-                        <div key={art.slug} className="bg-zinc-900/60 border border-zinc-700/60 rounded-2xl p-6 flex flex-col justify-between hover:border-zinc-500/80 transition-all gap-6 relative group shadow-lg">
-                            <div className="flex flex-col gap-4">
+                        <div key={art.slug} className="bg-zinc-900/60 border border-zinc-700/60 rounded-2xl overflow-hidden hover:border-zinc-500/80 transition-all flex flex-col justify-between relative group shadow-lg">
+                            {art.image && (
+                                <div className="h-36 bg-zinc-950 overflow-hidden relative border-b border-zinc-800">
+                                    <img src={art.image} alt={art.title} className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500" />
+                                    <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-zinc-950/20 to-transparent" />
+                                </div>
+                            )}
+                            <div className="p-6 flex flex-col justify-between flex-1 gap-6">
                                 {/* Metadata headers */}
                                 <div className="flex items-center justify-between gap-4 pr-16">
                                     <span className={`text-[9px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md border ${getBadgeStyles(art.category)}`}>
@@ -168,18 +179,18 @@ export default function AddBlogs() {
                                         {art.content.length} paragraphs written
                                     </span>
                                 </div>
-                            </div>
 
-                            {/* View external preview */}
-                            <div className="flex items-center justify-between border-t border-zinc-900/60 pt-4 mt-auto">
-                                <a 
-                                    href={`/blog/${art.slug}`} 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="text-[10px] text-zinc-500 hover:text-white transition-colors"
-                                >
-                                    Preview Article Page →
-                                </a>
+                                {/* View external preview */}
+                                <div className="flex items-center justify-between border-t border-zinc-900/60 pt-4 mt-auto">
+                                    <a 
+                                        href={`/blog/${art.slug}`} 
+                                        target="_blank" 
+                                        rel="noreferrer"
+                                        className="text-[10px] text-zinc-500 hover:text-white transition-colors"
+                                    >
+                                        Preview Article Page →
+                                    </a>
+                                </div>
                             </div>
 
                             {/* Absolute position controls */}
@@ -252,6 +263,60 @@ export default function AddBlogs() {
                                             <option key={c} value={c}>{c}</option>
                                         ))}
                                     </select>
+                                </div>
+
+                                {/* Article Cover Image */}
+                                <div className="flex flex-col gap-2 bg-zinc-950/60 p-3.5 rounded-xl border border-zinc-800/80">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-[10px] font-semibold tracking-widest text-zinc-300 uppercase flex items-center gap-1.5">
+                                            <Camera size={13} className="text-indigo-400" />
+                                            <span>Article Cover Image</span>
+                                        </label>
+                                        <span className="text-[9px] font-medium text-emerald-400">
+                                            {imageFile ? "File Picked" : image ? "Image URL Set" : "Default Placeholder"}
+                                        </span>
+                                    </div>
+
+                                    {/* Live Preview */}
+                                    {(image || imageFile) && (
+                                        <div className="h-32 w-full rounded-lg overflow-hidden relative border border-zinc-750 bg-black">
+                                            <img 
+                                                src={imageFile ? URL.createObjectURL(imageFile) : image} 
+                                                alt="Article preview" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                            <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-xs text-white text-[9px] font-semibold px-2 py-0.5 rounded border border-zinc-700">
+                                                {imageFile ? "Manual File Upload" : "Image URL"}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* File Picker */}
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-[9px] text-zinc-400 font-medium">Option A: Upload Image File</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setImageFile(e.target.files[0]);
+                                                }
+                                            }}
+                                            className="text-[10px] text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
+                                        />
+                                    </div>
+
+                                    {/* URL Input */}
+                                    <div className="flex flex-col gap-1 mt-1">
+                                        <span className="text-[9px] text-zinc-400 font-medium">Option B: Image URL / Unsplash Link</span>
+                                        <input
+                                            type="url"
+                                            value={image}
+                                            onChange={(e) => setImage(e.target.value)}
+                                            placeholder="https://images.unsplash.com/photo-..."
+                                            className="w-full bg-zinc-900 border border-zinc-800 hover:border-zinc-700 focus:border-indigo-500 text-zinc-100 rounded-lg px-3 py-1.5 text-xs focus:outline-none placeholder-zinc-500"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Excerpt */}

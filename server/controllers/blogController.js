@@ -86,6 +86,8 @@ const createBlog = async (req, res) => {
         let imageUrl = "";
         if (req.file) {
             imageUrl = await uploadToCloudOrLocal(req.file, "nexion_blogs");
+        } else if (req.body.image && req.body.image.trim() !== "") {
+            imageUrl = req.body.image.trim();
         } else {
             // Placeholder technology background
             imageUrl = "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=800&q=80";
@@ -145,6 +147,8 @@ const updateBlog = async (req, res) => {
         // Handle new image upload
         if (req.file) {
             blog.image = await uploadToCloudOrLocal(req.file, "nexion_blogs");
+        } else if (req.body.image && req.body.image.trim() !== "") {
+            blog.image = req.body.image.trim();
         }
 
         const updatedBlog = await blog.save();

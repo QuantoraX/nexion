@@ -42,8 +42,11 @@ export default function BlogDetails() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO HEADER ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-[url('/tech-hero-bg.png')] bg-cover bg-center">
-                <div className="absolute inset-0 bg-black/75 pointer-events-none" />
+            <section 
+                className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center"
+                style={{ backgroundImage: `url(${article.image || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?fit=crop&w=1200&q=80"})` }}
+            >
+                <div className="absolute inset-0 bg-black/75 backdrop-blur-xs pointer-events-none" />
 
                 <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
                     <motion.div
@@ -99,8 +102,24 @@ export default function BlogDetails() {
             </section>
 
             {/* ══ 2. ARTICLE CONTENT ════════════════════════════════════ */}
-            <section className="py-20 px-4 w-full bg-white">
+            <section className="py-16 px-4 w-full bg-white">
                 <div className="max-w-3xl mx-auto flex flex-col gap-8">
+                    
+                    {/* Article Cover Image Banner */}
+                    {article.image && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="w-full h-72 md:h-100 rounded-2xl overflow-hidden shadow-lg border border-zinc-200 bg-zinc-900"
+                        >
+                            <img 
+                                src={article.image} 
+                                alt={article.title} 
+                                className="w-full h-full object-cover"
+                            />
+                        </motion.div>
+                    )}
                     
                     {article.content.map((paragraph, index) => {
                         const isHeader = paragraph.endsWith(":");

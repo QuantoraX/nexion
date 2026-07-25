@@ -33,6 +33,7 @@ export interface PortfolioProject {
     solution: string;
     techStack: string[];
     details: ProjectDetail[];
+    websiteUrl?: string;
 }
 
 export interface TestimonialItem {
@@ -80,6 +81,7 @@ interface AppContextType {
     addProject: (formData: FormData | Partial<PortfolioProject>) => Promise<boolean>;
     updateProject: (id: string, formData: FormData | Partial<PortfolioProject>) => Promise<boolean>;
     deleteProject: (id: string) => Promise<boolean>;
+    captureWebsiteScreenshot: (url: string) => Promise<string | null>;
 
     // Testimonials
     testimonials: TestimonialItem[];
@@ -381,6 +383,31 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         }
     };
 
+    const captureWebsiteScreenshot = async (url: string): Promise<string | null> => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/portfolio/screenshot`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${adminToken}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url })
+            });
+            const data = await res.json();
+
+            if (res.ok && data.imageUrl) {
+                toast.success("Website screenshot captured & uploaded to Cloudinary!");
+                return data.imageUrl;
+            } else {
+                toast.error(data.message || "Failed to capture website screenshot.");
+                return null;
+            }
+        } catch {
+            toast.error("Network error while capturing website screenshot.");
+            return null;
+        }
+    };
+
     /* ─── 4. Testimonials Actions ──────────────────────────────────────── */
     const fetchTestimonials = async (): Promise<void> => {
         setLoadingTestimonials(true);
@@ -622,6 +649,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
                 addProject,
                 updateProject,
                 deleteProject,
+                captureWebsiteScreenshot,
 
                 testimonials,
                 testimonialsCol1,

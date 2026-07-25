@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Briefcase, Tag } from "lucide-react";
+import { ArrowRight, Briefcase, Tag, Globe } from "lucide-react";
 import { portfolioCategories } from "../data/portfolio-data";
 import { useAppContext } from "../context/appContext";
 
@@ -138,13 +138,26 @@ export default function Portfolio() {
                                                 )}
                                             </div>
 
-                                            <Link 
-                                                to={`/portfolio/${project.slug}`}
-                                                className="flex items-center gap-1.5 text-sm font-medium text-zinc-900 hover:text-zinc-700 transition-colors group/link cursor-pointer shrink-0"
-                                            >
-                                                <span>View Study</span>
-                                                <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                                            </Link>
+                                            <div className="flex items-center gap-3 shrink-0">
+                                                {project.websiteUrl && (
+                                                    <a 
+                                                        href={project.websiteUrl}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+                                                    >
+                                                        <Globe size={13} />
+                                                        <span>Live Site</span>
+                                                    </a>
+                                                )}
+                                                <Link 
+                                                    to={`/portfolio/${project.slug}`}
+                                                    className="flex items-center gap-1.5 text-sm font-medium text-zinc-900 hover:text-zinc-700 transition-colors group/link cursor-pointer"
+                                                >
+                                                    <span>View Study</span>
+                                                    <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                                                </Link>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
