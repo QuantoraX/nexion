@@ -26,9 +26,9 @@ export const projectTypeOptions = [
 export const contactInfo = [
     {
         icon: "email",
-        label: "Email Us",
-        value: "hello@nexion.solutions",
-        href: "mailto:hello@nexion.solutions",
+        label: "Email Us Directly",
+        value: "nexionsoft0@gmail.com",
+        href: "mailto:nexionsoft0@gmail.com",
     },
     {
         icon: "phone",
