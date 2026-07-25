@@ -32,7 +32,7 @@ HOW CLIENTS GET STARTED:
 BEHAVIOR INSTRUCTIONS:
 - Be professional, technical yet warm, concise, and helpful.
 - Format responses clearly using short paragraphs, bold text, or bullet points.
-- If the user asks for contact info, email: hello@nexion.solutions or phone: +94 77 000 0000.
+- If the user asks for contact info, email: nexionsoft0@gmail.com or phone: +94 77 000 0000.
 - Encourage users to fill out the contact form or leave their details to schedule a free discovery call.
 `;
 
@@ -68,7 +68,7 @@ We offer both **fixed-price proposals** and **transparent time-and-materials** s
 
 You can:
 1. Fill out our **Contact Form** on the website.
-2. Email us directly at **hello@nexion.solutions**
+2. Email us directly at **nexionsoft0@gmail.com**
 3. Call or WhatsApp us at **+94 77 000 0000**
 
 We sign a mutual **NDA** before all discussions and respond within 24 hours to schedule a free 30-minute discovery call.`;
@@ -88,7 +88,7 @@ Is there a specific tech stack requirement for your project?`;
     return `Thank you for reaching out! As NOVA, Nexion Solutions' AI Assistant, I can help you with:
 
 • Learning about our **services & tech stack**
-• Estimating **project timelines & budgets**
+• Estimating **project timelines & scope**
 • Connecting with our engineering team for a **free discovery call**
 
 How can I assist you with your project today?`;
@@ -111,6 +111,8 @@ const handleChat = async (req, res) => {
         if (apiKey && apiKey !== "your_openrouter_api_key_here") {
             const candidateModels = [
                 process.env.OPENROUTER_MODEL,
+                "google/gemini-2.5-flash:free",
+                "meta-llama/llama-3.3-70b-instruct:free",
                 "meta-llama/llama-3.1-8b-instruct:free",
                 "mistralai/mistral-7b-instruct:free",
                 "openrouter/auto"

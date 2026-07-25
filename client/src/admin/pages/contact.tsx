@@ -7,7 +7,6 @@ import {
     Search, 
     Eye, 
     Clock, 
-    DollarSign, 
     Layers,
     Send,
     Reply,
@@ -195,9 +194,8 @@ export default function Contact() {
                     {/* Header Columns for Desktop */}
                     <div className="hidden lg:grid grid-cols-12 gap-4 px-6 py-3.5 bg-zinc-950/80 border-b border-zinc-800 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
                         <div className="col-span-1">Status</div>
-                        <div className="col-span-3">Sender</div>
-                        <div className="col-span-2">Project Type</div>
-                        <div className="col-span-2">Budget</div>
+                        <div className="col-span-4">Sender</div>
+                        <div className="col-span-3">Project Type</div>
                         <div className="col-span-2">Date Received</div>
                         <div className="col-span-2 text-right">Actions</div>
                     </div>
@@ -225,33 +223,27 @@ export default function Contact() {
                                 </div>
 
                                 {/* Sender detail */}
-                                <div className="col-span-3 flex flex-col gap-0.5 min-w-0">
+                                <div className="col-span-4 flex flex-col gap-0.5 min-w-0">
                                     <span className={`text-xs truncate ${inq.status === "new" ? "font-bold text-white" : "font-medium text-zinc-200"}`}>
                                         {inq.name}
                                     </span>
                                     <span className="text-[10px] text-zinc-400 truncate">{inq.email}</span>
-                                    {inq.company && inq.company !== "None" && inq.company !== "None (Homepage Form)" && (
+                                    {inq.company && inq.company !== "None" && inq.company !== "None (Homepage Form)" && inq.company !== "Not specified" && (
                                         <span className="text-[9px] text-zinc-500 truncate">at {inq.company}</span>
                                     )}
                                 </div>
 
                                 {/* Project Service Type */}
-                                <div className="col-span-2 flex items-center gap-1.5 text-xs text-zinc-300">
-                                    <Layers size={11} className="text-zinc-500" />
-                                    <span className="bg-zinc-950/80 px-2 py-0.5 rounded border border-zinc-800 text-zinc-300 text-[10px] uppercase font-semibold tracking-wider truncate">
+                                <div className="col-span-3 flex items-center gap-1.5 text-xs text-zinc-300">
+                                    <Layers size={11} className="text-zinc-500 shrink-0" />
+                                    <span className="bg-zinc-950/80 px-2.5 py-1 rounded-lg border border-zinc-800 text-zinc-200 text-[10px] uppercase font-semibold tracking-wider truncate">
                                         {inq.projectType}
                                     </span>
                                 </div>
 
-                                {/* Budget */}
-                                <div className="col-span-2 flex items-center gap-1 text-xs text-zinc-300">
-                                    <DollarSign size={11} className="text-zinc-500" />
-                                    <span className="truncate text-zinc-400">{inq.budget || "Not Specified"}</span>
-                                </div>
-
                                 {/* Date */}
                                 <div className="col-span-2 flex items-center gap-1 text-[10px] text-zinc-500">
-                                    <Clock size={11} className="text-zinc-600" />
+                                    <Clock size={11} className="text-zinc-600 shrink-0" />
                                     <span>{inq.date}</span>
                                 </div>
 
@@ -412,7 +404,7 @@ export default function Contact() {
 
                         {/* Modal Footer */}
                         <div className="px-6 py-4 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between">
-                            <span className="text-[10px] text-zinc-500">Budget Range: {viewInquiry.budget}</span>
+                            <span className="text-[10px] text-zinc-500">Submitted on: {viewInquiry.date}</span>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => deleteMessage(viewInquiry._id || viewInquiry.id)}
