@@ -28,6 +28,8 @@ const createTestimonial = async (req, res) => {
         let avatarUrl = "";
         if (req.file) {
             avatarUrl = await uploadToCloudOrLocal(req.file, "nexion_testimonials");
+        } else if (req.body.avatar && req.body.avatar.trim() !== "") {
+            avatarUrl = req.body.avatar.trim();
         } else {
             // Default placeholder avatar
             avatarUrl = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?fit=crop&w=120&h=120&q=80";
@@ -67,6 +69,8 @@ const updateTestimonial = async (req, res) => {
         // Handle new avatar upload
         if (req.file) {
             testimonial.avatar = await uploadToCloudOrLocal(req.file, "nexion_testimonials");
+        } else if (req.body.avatar && req.body.avatar.trim() !== "") {
+            testimonial.avatar = req.body.avatar.trim();
         }
 
         const updatedTestimonial = await testimonial.save();

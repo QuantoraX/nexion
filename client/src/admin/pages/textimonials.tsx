@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Edit2, Trash2, X, Star } from "lucide-react";
+import { Plus, Edit2, Trash2, X, Star, Camera } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAppContext, TestimonialItem } from "../../context/appContext";
 
@@ -64,6 +64,8 @@ export default function Textimonials() {
 
         if (avatarFile) {
             formData.append("avatar", avatarFile);
+        } else if (avatar) {
+            formData.append("avatar", avatar);
         }
 
         let success = false;
@@ -236,17 +238,59 @@ export default function Textimonials() {
                                     />
                                 </div>
 
-                                {/* Avatar Image Link */}
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">Avatar Picture Link *</label>
-                                    <input
-                                        type="url"
-                                        value={avatar}
-                                        onChange={(e) => setAvatar(e.target.value)}
-                                        placeholder="https://images.unsplash.com/..."
-                                        className="w-full bg-zinc-950/90 border border-zinc-800/80 hover:border-zinc-700 focus:border-indigo-500/80 focus:ring-1 focus:ring-indigo-500/40 text-zinc-100 rounded-xl px-4 py-2.5 text-xs focus:outline-none placeholder-zinc-500 transition-all"
-                                    />
-                                    <span className="text-[9px] text-zinc-500">Recommended: 120x120px square shape image URL.</span>
+                                {/* Avatar Image Upload Container */}
+                                <div className="flex flex-col gap-2 bg-zinc-950/60 p-3.5 rounded-xl border border-zinc-800/80">
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-[10px] font-semibold tracking-widest text-zinc-300 uppercase flex items-center gap-1.5">
+                                            <Camera size={13} className="text-indigo-400" />
+                                            <span>Client Avatar Picture</span>
+                                        </label>
+                                        <span className="text-[9px] font-medium text-emerald-400">
+                                            {avatarFile ? "File Picked" : avatar ? "Avatar Set" : "Pending"}
+                                        </span>
+                                    </div>
+
+                                    {/* Live Circle Preview */}
+                                    {(avatar || avatarFile) && (
+                                        <div className="flex items-center gap-3 p-2 bg-zinc-900 rounded-lg border border-zinc-800">
+                                            <img 
+                                                src={avatarFile ? URL.createObjectURL(avatarFile) : avatar} 
+                                                alt="Avatar preview" 
+                                                className="size-12 rounded-full object-cover border border-zinc-700 shadow-sm"
+                                            />
+                                            <div className="flex flex-col">
+                                                <span className="text-xs font-semibold text-white">{name || "Client Name"}</span>
+                                                <span className="text-[10px] text-zinc-400">{location || "Position & Company"}</span>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* File Picker */}
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-[9px] text-zinc-400 font-medium">Option A: Upload Avatar Photo File</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                if (e.target.files && e.target.files[0]) {
+                                                    setAvatarFile(e.target.files[0]);
+                                                }
+                                            }}
+                                            className="text-[10px] text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-zinc-800 file:text-zinc-200 hover:file:bg-zinc-700 cursor-pointer"
+                                        />
+                                    </div>
+
+                                    {/* URL Input */}
+                                    <div className="flex flex-col gap-1 mt-1">
+                                        <span className="text-[9px] text-zinc-400 font-medium">Option B: Avatar Image URL / Cloudinary Link</span>
+                                        <input
+                                            type="url"
+                                            value={avatar}
+                                            onChange={(e) => setAvatar(e.target.value)}
+                                            placeholder="https://images.unsplash.com/photo-..."
+                                            className="w-full bg-zinc-900 border border-zinc-800 hover:border-zinc-700 focus:border-indigo-500 text-zinc-100 rounded-lg px-3 py-1.5 text-xs focus:outline-none placeholder-zinc-500"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Text Area content */}
