@@ -96,8 +96,8 @@ export function Footer() {
 
                 {/* Big Glow Brand Banner */}
                 <div className="relative mt-8 select-none pointer-events-none overflow-hidden">
-                    <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-4xl h-full max-h-64 bg-indigo-600/30 rounded-full blur-[160px] pointer-events-none" />
-                    <h3 className="text-center font-extrabold leading-[0.75] text-transparent text-[clamp(4rem,18vw,16rem)] [-webkit-text-stroke:1.5px_#4f46e5] md:[-webkit-text-stroke:2px_#6366f1] mt-4 tracking-tighter uppercase opacity-90">
+                    <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-4xl h-full max-h-64 bg-zinc-400/10 rounded-full blur-[140px] pointer-events-none" />
+                    <h3 className="text-center font-extrabold leading-[0.75] text-transparent text-[clamp(4rem,18vw,16rem)] [-webkit-text-stroke:1.5px_#d4d4d8] md:[-webkit-text-stroke:2px_#e4e4e7] mt-4 tracking-tighter uppercase opacity-85">
                         NEXION
                     </h3>
                 </div>
