@@ -1,14 +1,15 @@
-import {
-    Code2, BrainCircuit, Layers, ShieldCheck,
-    Users, Target, Globe, Award,
-} from "lucide-react";
+import { BrainCircuit, ShieldCheck, Globe, Award } from "lucide-react";
+import umeshImg from "../assets/umesh.jpeg";
+import sihumImg from "../assets/sihum.png";
+import melanImg from "../assets/melan.jpeg";
+import keshanImg from "../assets/keshan.jpeg";
 
 /* ─── Types ──────────────────────────────────────────────────────── */
 export interface TeamMember {
     name: string;
     role: string;
     bio: string;
-    icon: React.ReactNode;
+    image: string;
     socials: { linkedin: string; twitter: string; github: string };
 }
 
@@ -26,10 +27,10 @@ export interface Milestone {
 /* ─── Team Members ───────────────────────────────────────────────── */
 export const teamMembers: TeamMember[] = [
     {
-        name: "Alex Carter",
-        role: "CEO & Co-Founder",
-        bio: "12+ years scaling global SaaS and enterprise platforms across Southeast Asia and Europe.",
-        icon: <Users className="size-5 text-zinc-600" />,
+        name: "Umesh",
+        role: "Founder / CEO",
+        bio: "Visionary leader driving engineering excellence, global strategy, and client success at Nexion Solutions.",
+        image: umeshImg,
         socials: {
             linkedin: "https://linkedin.com",
             twitter: "https://twitter.com",
@@ -37,10 +38,10 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Priya Nair",
-        role: "CTO & Lead Architect",
-        bio: "Cloud-native systems expert with deep expertise in microservices, AI/ML pipelines, and DevOps.",
-        icon: <Code2 className="size-5 text-zinc-600" />,
+        name: "Sithum",
+        role: "Full Stack Developer",
+        bio: "Expert full stack engineer specializing in cloud-native Node.js, React, microservices, and database architectures.",
+        image: sihumImg,
         socials: {
             linkedin: "https://linkedin.com",
             twitter: "https://twitter.com",
@@ -48,10 +49,10 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Marcus Webb",
-        role: "Head of Product",
-        bio: "Product strategist who transforms complex workflows into intuitive, outcome-driven software.",
-        icon: <Layers className="size-5 text-zinc-600" />,
+        name: "Melan",
+        role: "Frontend Developer",
+        bio: "Creative frontend specialist crafting modern, responsive, pixel-perfect user interfaces and interactive web apps.",
+        image: melanImg,
         socials: {
             linkedin: "https://linkedin.com",
             twitter: "https://twitter.com",
@@ -59,10 +60,10 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Sasha Ivanova",
-        role: "Lead UI/UX Designer",
-        bio: "Pixel-perfect designer crafting high-converting interfaces that users genuinely enjoy using.",
-        icon: <Target className="size-5 text-zinc-600" />,
+        name: "Keshan",
+        role: "QA Engineer",
+        bio: "Quality assurance specialist ensuring zero-defect software releases, automated testing pipelines, and reliability.",
+        image: keshanImg,
         socials: {
             linkedin: "https://linkedin.com",
             twitter: "https://twitter.com",

@@ -62,14 +62,14 @@ export function TeamSection() {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ once: true }}
-                            className="border border-zinc-200 rounded-xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow duration-300 bg-white"
+                            className="border border-zinc-200/90 rounded-2xl p-6 flex flex-col gap-4 hover:shadow-lg transition-all duration-300 bg-white group"
                         >
-                            <div className="size-12 rounded-full bg-zinc-100 flex items-center justify-center">
-                                {member.icon}
+                            <div className="size-24 rounded-2xl overflow-hidden border border-zinc-200 shadow-sm shrink-0 bg-zinc-100 transition-transform duration-300 group-hover:scale-105">
+                                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                             </div>
                             <div>
-                                <h3 className="text-zinc-900 font-medium">{member.name}</h3>
-                                <span className="text-xs text-zinc-500">{member.role}</span>
+                                <h3 className="text-zinc-900 font-semibold text-lg">{member.name}</h3>
+                                <span className="text-xs font-semibold text-indigo-600 uppercase tracking-wider block mt-0.5">{member.role}</span>
                             </div>
                             <p className="text-zinc-500 text-sm leading-relaxed flex-1">{member.bio}</p>
                             <div className="flex items-center gap-3 pt-3 border-t border-zinc-100">
