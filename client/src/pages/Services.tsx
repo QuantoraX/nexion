@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { ArrowRight, ChevronDown, Zap, Quote } from "lucide-react";
-import { services, techStack, processSteps, benefits, testimonials, faqs } from "../data/services-data";
+import { services, techStack, processSteps, benefits, faqs } from "../data/services-data";
+import { useAppContext } from "../context/appContext";
 
 /* ─── Animation variant ─────────────────────────────────────────── */
 const fadeUp = {
@@ -78,6 +79,7 @@ function FAQItem({ faq, index, open, onToggle }: {
 /* ─── Component ──────────────────────────────────────────────────── */
 export default function Services() {
     const navigate = useNavigate();
+    const { testimonials } = useAppContext();
     const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
     const handleCTA = () => {
@@ -362,7 +364,7 @@ export default function Services() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {testimonials.map((t, i) => (
                             <motion.div
-                                key={i}
+                                key={t._id || t.id || i}
                                 custom={i}
                                 variants={fadeUp}
                                 initial="hidden"
@@ -371,14 +373,24 @@ export default function Services() {
                                 className="flex flex-col gap-5 border border-zinc-200 rounded-xl p-7 bg-white hover:shadow-md transition-shadow duration-300"
                             >
                                 <Quote size={22} className="text-zinc-300" />
-                                <p className="text-zinc-600 text-sm leading-relaxed flex-1 italic">"{t.quote}"</p>
+                                <p className="text-zinc-600 text-sm leading-relaxed flex-1 italic">
+                                    "{t.text || (t as any).quote}"
+                                </p>
                                 <div className="flex items-center gap-3 pt-4 border-t border-zinc-100">
-                                    <div className="size-9 rounded-full bg-zinc-900 text-white flex items-center justify-center text-sm font-medium shrink-0">
-                                        {t.initial}
-                                    </div>
+                                    {t.avatar ? (
+                                        <img 
+                                            src={t.avatar} 
+                                            alt={t.name} 
+                                            className="size-10 rounded-full object-cover border border-zinc-200 shrink-0" 
+                                        />
+                                    ) : (
+                                        <div className="size-10 rounded-full bg-zinc-900 text-white flex items-center justify-center text-sm font-medium shrink-0">
+                                            {t.name ? t.name.charAt(0).toUpperCase() : "C"}
+                                        </div>
+                                    )}
                                     <div>
                                         <p className="text-zinc-900 font-medium text-sm">{t.name}</p>
-                                        <p className="text-zinc-400 text-xs">{t.role}, {t.company}</p>
+                                        <p className="text-zinc-400 text-xs">{t.location || `${(t as any).role || 'Client'}, ${(t as any).company || 'Partner'}`}</p>
                                     </div>
                                 </div>
                             </motion.div>

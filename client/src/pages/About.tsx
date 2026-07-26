@@ -211,6 +211,9 @@ export default function About() {
                 </div>
             </section>
 
+            {/* ── 7. TEAM ────────────────────────────────────────────── */}
+            <TeamSection />
+
             {/* ── 5. CAPABILITIES ────────────────────────────────────── */}
             <section className="py-20 px-4 md:px-16 lg:px-24 xl:px-32 w-full">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -300,8 +303,7 @@ export default function About() {
                 </div>
             </section>
 
-            {/* ── 7. TEAM ────────────────────────────────────────────── */}
-            <TeamSection />
+            
 
         </div>
     );
