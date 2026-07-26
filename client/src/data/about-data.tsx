@@ -27,7 +27,7 @@ export interface Milestone {
 /* ─── Team Members ───────────────────────────────────────────────── */
 export const teamMembers: TeamMember[] = [
     {
-        name: "Umesh",
+        name: "Umesh Dilshan",
         role: "Founder / CEO",
         bio: "Visionary leader driving engineering excellence, global strategy, and client success at Nexion Solutions.",
         image: umeshImg,
@@ -38,7 +38,7 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Sithum",
+        name: "Sithum Chanuka",
         role: "Full Stack Developer",
         bio: "Expert full stack engineer specializing in cloud-native Node.js, React, microservices, and database architectures.",
         image: sihumImg,
@@ -49,7 +49,7 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Melan",
+        name: "Melan Akash",
         role: "Frontend Developer",
         bio: "Creative frontend specialist crafting modern, responsive, pixel-perfect user interfaces and interactive web apps.",
         image: melanImg,
@@ -60,7 +60,7 @@ export const teamMembers: TeamMember[] = [
         },
     },
     {
-        name: "Keshan",
+        name: "Keshan Randula",
         role: "QA Engineer",
         bio: "Quality assurance specialist ensuring zero-defect software releases, automated testing pipelines, and reliability.",
         image: keshanImg,
