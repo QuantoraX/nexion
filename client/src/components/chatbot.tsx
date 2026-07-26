@@ -173,7 +173,7 @@ export function Chatbot() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 30, scale: 0.95 }}
                         transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                        className="w-[92vw] sm:w-[400px] h-[580px] max-h-[85vh] bg-zinc-950/95 backdrop-blur-2xl border border-zinc-800/90 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.7)] flex flex-col overflow-hidden relative"
+                        className="w-[92vw] sm:w-100 h-145 max-h-[85vh] bg-zinc-950/95 backdrop-blur-2xl border border-zinc-800/90 rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.7)] flex flex-col overflow-hidden relative"
                     >
                         {/* Background subtle ambient lights */}
                         <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
