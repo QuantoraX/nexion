@@ -37,11 +37,13 @@ export function Navbar() {
     return (
         <>
             <nav className={`fixed z-50 flex items-center justify-between left-1/2 -translate-x-1/2 transition-all duration-500 p-4 ${scrolled ? "lg:w-5xl w-[calc(100vw-14px)] bg-white/60 backdrop-blur-2xl rounded-full mt-4 pl-6 pr-6 shadow" : "md:px-16 lg:px-24 xl:px-32 w-full pt-6"}`}>
-                <Link to="/" className="flex items-center">
+                <Link to="/" className="flex items-center py-0.5">
                     <img
                         src={scrolled ? logo1 : logo2}
                         alt="Nexion Solutions Logo"
-                        className="h-10 md:h-12 w-auto object-contain transition-all duration-500"
+                        className={`w-auto object-contain transition-all duration-500 ${
+                            scrolled ? "h-12 md:h-14 scale-110 origin-left" : "h-16 md:h-20 lg:h-24 scale-110 md:scale-125 origin-left -my-2"
+                        }`}
                     />
                 </Link>
 

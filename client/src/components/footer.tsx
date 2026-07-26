@@ -10,7 +10,7 @@ export function Footer() {
                     {/* Brand Column */}
                     <div className="lg:col-span-3 space-y-6">
                         <Link to="/" className="block select-none">
-                            <img src={logo2} alt="Nexion Solutions" className="h-24 md:h-28 w-full object-contain" />
+                            <img src={logo2} alt="Nexion Solutions" className="h-24 md:h-28 w-auto object-contain" />
                         </Link>
                         <p className="text-sm/6 text-zinc-400 max-w-md">
                             Nexion Solutions empowers businesses through cutting-edge technology, custom software engineering, and robust digital platforms.
