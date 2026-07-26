@@ -146,21 +146,22 @@ export default function Contactus() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop')" }}>
-                <div className="absolute inset-0 bg-black/70 pointer-events-none" />
+            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2070&auto=format&fit=crop')" }}>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/65 to-black/50 pointer-events-none" />
 
                 <motion.div
-                    className="relative z-10 bg-white/10 backdrop-blur border border-white/20 text-xs text-white pl-3 pr-5 py-1.5 rounded-full flex items-center gap-2 mb-6"
+                    className="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 text-xs text-white px-4 py-2 rounded-full flex items-center gap-2 mb-6 shadow-lg"
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
                 >
+                    <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
                     <MessageSquare size={13} />
-                    <span>Let's Connect & Innovate</span>
+                    <span className="font-medium tracking-wide">Dedicated Client Support & Consultation</span>
                 </motion.div>
 
                 <motion.h1
-                    className="relative z-10 text-4xl md:text-6xl font-medium leading-tight max-w-3xl text-white"
+                    className="relative z-10 text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight max-w-3xl text-white tracking-tight"
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ type: "spring" as const, stiffness: 240, damping: 70 }}
@@ -169,12 +170,12 @@ export default function Contactus() {
                 </motion.h1>
 
                 <motion.p
-                    className="relative z-10 mt-4 text-zinc-300 max-w-lg text-sm md:text-base leading-relaxed"
+                    className="relative z-10 mt-4 text-zinc-200 max-w-xl text-sm md:text-base leading-relaxed"
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
                 >
-                    Whether you have a fully drafted project specification or just an early idea, we’re here to help you scope, design, and build your custom digital platform.
+                    Whether you have a fully drafted project specification or just an early idea, our client success team is ready to scope, design, and build your custom digital platform.
                 </motion.p>
             </section>
 
