@@ -1,6 +1,6 @@
 import { BrainCircuit, ShieldCheck, Globe, Award } from "lucide-react";
 import umeshImg from "../assets/umesh.jpeg";
-import sihumImg from "../assets/sihum.png";
+import sihumImg from "../assets/sihum.jpeg";
 import melanImg from "../assets/melan.jpeg";
 import keshanImg from "../assets/keshan.jpeg";
 
