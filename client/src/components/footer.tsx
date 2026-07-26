@@ -4,13 +4,13 @@ import logo2 from "../assets/logo2.png";
 export function Footer() {
     return (
         <div className="bg-black pt-16 px-4 w-full overflow-hidden">
-            <footer className="bg-[#111113] border border-zinc-800/80 w-full max-w-[1380px] mx-auto text-white pt-10 lg:pt-14 px-5 sm:px-8 md:px-14 lg:px-20 rounded-t-3xl overflow-hidden relative shadow-2xl">
+            <footer className="bg-[#111113] border border-zinc-800/80 w-full max-w-345 mx-auto text-white pt-10 lg:pt-14 px-5 sm:px-8 md:px-14 lg:px-20 rounded-t-3xl overflow-hidden relative shadow-2xl">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-8 md:gap-12">
                     
                     {/* Brand Column */}
                     <div className="lg:col-span-3 space-y-6">
                         <Link to="/" className="block select-none">
-                            <img src={logo2} alt="Nexion Solutions" className="h-24 md:h-28 w-auto object-contain" />
+                            <img src={logo2} alt="Nexion Solutions" className="h-24 md:h-28 w-full object-contain" />
                         </Link>
                         <p className="text-sm/6 text-zinc-400 max-w-md">
                             Nexion Solutions empowers businesses through cutting-edge technology, custom software engineering, and robust digital platforms.
@@ -49,7 +49,7 @@ export function Footer() {
                     <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-8 md:gap-12 items-start">
                         {/* Solutions */}
                         <div>
-                            <h3 className="font-semibold text-sm mb-4 text-white tracking-wider uppercase text-xs">Solutions</h3>
+                            <h3 className="font-semibold mb-4 text-white tracking-wider uppercase text-xs">Solutions</h3>
                             <ul className="space-y-3 text-sm text-zinc-400">
                                 <li><Link to="/services" className="hover:text-white transition-colors">Custom Software</Link></li>
                                 <li><Link to="/services" className="hover:text-white transition-colors">Mobile Apps</Link></li>
@@ -60,7 +60,7 @@ export function Footer() {
 
                         {/* Navigation */}
                         <div>
-                            <h3 className="font-semibold text-sm mb-4 text-white tracking-wider uppercase text-xs">Explore</h3>
+                            <h3 className="font-semibold mb-4 text-white tracking-wider uppercase text-xs">Explore</h3>
                             <ul className="space-y-3 text-sm text-zinc-400">
                                 <li><Link to="/" className="hover:text-white transition-colors">Home</Link></li>
                                 <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
@@ -71,7 +71,7 @@ export function Footer() {
 
                         {/* Company & Support */}
                         <div className="col-span-2 sm:col-span-1">
-                            <h3 className="font-semibold text-sm mb-4 text-white tracking-wider uppercase text-xs">Company</h3>
+                            <h3 className="font-semibold mb-4 text-white tracking-wider uppercase text-xs">Company</h3>
                             <ul className="space-y-3 text-sm text-zinc-400">
                                 <li><Link to="/contact" className="text-indigo-400 font-medium hover:text-indigo-300 transition-colors flex items-center gap-1">Contact Us →</Link></li>
                                 <li className="flex items-center gap-2">
@@ -96,8 +96,8 @@ export function Footer() {
 
                 {/* Big Glow Brand Banner */}
                 <div className="relative mt-8 select-none pointer-events-none overflow-hidden">
-                    <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-4xl h-full max-h-64 bg-zinc-400/10 rounded-full blur-[140px] pointer-events-none" />
-                    <h3 className="text-center font-extrabold leading-[0.75] text-transparent text-[clamp(4rem,18vw,16rem)] [-webkit-text-stroke:1.5px_#d4d4d8] md:[-webkit-text-stroke:2px_#e4e4e7] mt-4 tracking-tighter uppercase opacity-85">
+                    <div className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-4xl h-full max-h-64 bg-indigo-600/30 rounded-full blur-[160px] pointer-events-none" />
+                    <h3 className="text-center font-extrabold leading-[0.75] text-transparent text-[clamp(4rem,18vw,16rem)] [-webkit-text-stroke:1.5px_#4f46e5] md:[-webkit-text-stroke:2px_#6366f1] mt-4 tracking-tighter uppercase opacity-90">
                         NEXION
                     </h3>
                 </div>
