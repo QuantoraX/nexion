@@ -10,14 +10,12 @@ import {
     Clock,
     ArrowRight,
     ChevronDown,
-    CheckCircle2,
     MessageSquare,
     Copy,
     Send,
     Sparkles
 } from "lucide-react";
 import { projectTypeOptions, contactFaqs } from "../data/contact-data";
-import contactWorkspace from "../assets/contact-workspace.png";
 
 /* ─── Animation Variant ─────────────────────────────────────────── */
 const fadeUp = {
@@ -146,22 +144,21 @@ export default function Contactus() {
         <div className="bg-white text-zinc-900 w-full overflow-x-hidden">
 
             {/* ══ 1. HERO SECTION ════════════════════════════════════════ */}
-            <section className="relative flex flex-col items-center justify-center min-h-[65vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2070&auto=format&fit=crop')" }}>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/65 to-black/50 pointer-events-none" />
+            <section className="relative flex flex-col items-center justify-center min-h-[60vh] px-4 text-center overflow-hidden bg-black bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop')" }}>
+                <div className="absolute inset-0 bg-black/70 pointer-events-none" />
 
                 <motion.div
-                    className="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 text-xs text-white px-4 py-2 rounded-full flex items-center gap-2 mb-6 shadow-lg"
+                    className="relative z-10 bg-white/10 backdrop-blur border border-white/20 text-xs text-white pl-3 pr-5 py-1.5 rounded-full flex items-center gap-2 mb-6"
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
                 >
-                    <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
                     <MessageSquare size={13} />
-                    <span className="font-medium tracking-wide">Dedicated Client Support & Consultation</span>
+                    <span>Let's Connect & Innovate</span>
                 </motion.div>
 
                 <motion.h1
-                    className="relative z-10 text-4xl sm:text-5xl md:text-6xl font-semibold leading-tight max-w-3xl text-white tracking-tight"
+                    className="relative z-10 text-4xl md:text-6xl font-medium leading-tight max-w-3xl text-white"
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ type: "spring" as const, stiffness: 240, damping: 70 }}
@@ -170,12 +167,12 @@ export default function Contactus() {
                 </motion.h1>
 
                 <motion.p
-                    className="relative z-10 mt-4 text-zinc-200 max-w-xl text-sm md:text-base leading-relaxed"
+                    className="relative z-10 mt-4 text-zinc-300 max-w-lg text-sm md:text-base leading-relaxed"
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2, type: "spring" as const, stiffness: 320, damping: 70 }}
                 >
-                    Whether you have a fully drafted project specification or just an early idea, our client success team is ready to scope, design, and build your custom digital platform.
+                    Whether you have a fully drafted project specification or just an early idea, we’re here to help you scope, design, and build your custom digital platform.
                 </motion.p>
             </section>
 
@@ -403,27 +400,6 @@ export default function Contactus() {
                                 </div>
                             </div>
                         </motion.div>
-
-                        {/* Image Banner Card */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.96 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ type: "spring", stiffness: 180, damping: 50 }}
-                            className="relative w-full h-56 rounded-3xl overflow-hidden border border-zinc-200 shadow-sm"
-                        >
-                            <img
-                                src={contactWorkspace}
-                                alt="Modern tech workspace"
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
-                            <div className="absolute bottom-5 left-5 right-5 flex items-center gap-2.5 text-white">
-                                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-                                <span className="text-xs font-medium text-zinc-200">Verified Custom Software Engineering Firm</span>
-                            </div>
-                        </motion.div>
-
                     </div>
                 </div>
             </section>
