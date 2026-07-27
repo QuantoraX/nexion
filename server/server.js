@@ -18,15 +18,27 @@ const chatRoutes = require("./routes/chatRoutes");
 // Instantiate Express
 const app = express();
 
-// Connect to Database
-connectDB().then(() => {
-    // Seed default admin user (admin/nexion2026) on startup if db is empty
-    seedAdminUser();
+// Database Connection Middleware for Vercel / serverless
+app.use(async (req, res, next) => {
+    await connectDB();
+    next();
 });
 
-// Configure CORS (Allow local Vite frontend connections)
+// Configure CORS (Allow local Vite frontend & production Vercel frontend)
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    process.env.CLIENT_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.length === 0 || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
     credentials: true
 }));
 
@@ -75,7 +87,6 @@ app.get("/api/health", (req, res) => {
 app.use((err, req, res, next) => {
     console.error("Global Server Error:", err.stack || err.message);
     
-    // Check if error is from Multer file limit
     if (err instanceof require("multer").MulterError) {
         return res.status(400).json({ message: `Upload error: ${err.message}` });
     }
@@ -85,8 +96,15 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start listener
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Nexion Server: Running in active dev mode on port ${PORT}...`);
-});
+// Start listener only when running standalone (not imported on Vercel)
+if (require.main === module || !process.env.VERCEL) {
+    connectDB().then(() => {
+        seedAdminUser();
+    });
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`Nexion Server: Running in active dev mode on port ${PORT}...`);
+    });
+}
+
+module.exports = app;
