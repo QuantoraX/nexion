@@ -22,6 +22,7 @@ import AddBlogs from "./admin/pages/addblogs";
 import AddPortfolio from "./admin/pages/addprotofile";
 
 import { Chatbot } from "./components/chatbot";
+import { WhatsAppButton } from "./components/whatsapp-button";
 
 function FrontendLayout() {
   return (
@@ -29,6 +30,7 @@ function FrontendLayout() {
       <LenisScroll />
       <Navbar />
       <Outlet />
+      <WhatsAppButton />
       <Chatbot />
       <Footer />
     </>

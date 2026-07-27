@@ -15,9 +15,36 @@ export function Footer() {
                         <p className="text-sm/6 text-zinc-400 max-w-md">
                             Nexion Solutions empowers businesses through cutting-edge technology, custom software engineering, and robust digital platforms.
                         </p>
+
+                        <div className="text-xs text-zinc-400 flex flex-col gap-1">
+                            <p className="flex items-center gap-2">
+                                <span className="font-semibold text-zinc-300">WhatsApp / Call:</span> 
+                                <a href="https://wa.me/94762871658" target="_blank" rel="noreferrer" className="text-emerald-400 hover:underline font-medium">
+                                    +94 76 287 1658
+                                </a>
+                            </p>
+                            <p className="flex items-center gap-2">
+                                <span className="font-semibold text-zinc-300">Facebook:</span> 
+                                <a href="https://www.facebook.com/share/18yzBJKpxg/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline">
+                                    Nexion Facebook Page
+                                </a>
+                            </p>
+                        </div>
                         
                         {/* Social Icons */}
                         <div className="flex gap-5 md:gap-6 items-center pt-2">
+                            {/* Facebook */}
+                            <a href="https://www.facebook.com/share/18yzBJKpxg/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#1877F2] transition-colors" title="Facebook">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                </svg>
+                            </a>
+                            {/* WhatsApp */}
+                            <a href="https://wa.me/94762871658" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-[#25D366] transition-colors" title="WhatsApp (+94 76 287 1658)">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.99c-.002 5.45-4.437 9.887-9.885 9.887m0-18.375C6.27 3.41 1.41 8.27 1.41 14.28c0 2.07.59 4.09 1.71 5.85L1.5 22.5l2.45-1.6c1.7 1 3.68 1.53 5.67 1.53h.01c6.01 0 10.87-4.86 10.87-10.87 0-2.9-.13-5.63-2.25-7.75A10.8 10.8 0 0012.05 3.41z" />
+                                </svg>
+                            </a>
                             {/* X (Twitter) */}
                             <a href="https://twitter.com" target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-white transition-colors" title="Twitter / X">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

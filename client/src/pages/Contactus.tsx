@@ -368,13 +368,27 @@ export default function Contactus() {
                             {/* Other Contact Channels */}
                             <div className="relative z-10 flex flex-col gap-4 pt-2">
                                 <div className="flex items-center gap-3.5 p-3.5 bg-zinc-900/50 border border-zinc-850 rounded-xl">
-                                    <div className="p-2.5 bg-zinc-800 text-white rounded-lg">
+                                    <div className="p-2.5 bg-[#25D366] text-white rounded-lg">
                                         <Phone size={16} />
                                     </div>
                                     <div className="flex flex-col">
                                         <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Call or WhatsApp</span>
-                                        <a href="https://wa.me/9477000000" target="_blank" rel="noreferrer" className="text-xs font-semibold text-white hover:underline">
-                                            +94 77 000 0000
+                                        <a href="https://wa.me/94762871658" target="_blank" rel="noreferrer" className="text-xs font-semibold text-emerald-400 hover:underline">
+                                            +94 76 287 1658
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-3.5 p-3.5 bg-zinc-900/50 border border-zinc-850 rounded-xl">
+                                    <div className="p-2.5 bg-[#1877F2] text-white rounded-lg">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        </svg>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-medium">Official Facebook Page</span>
+                                        <a href="https://www.facebook.com/share/18yzBJKpxg/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="text-xs font-semibold text-indigo-300 hover:underline">
+                                            Nexion Facebook Page
                                         </a>
                                     </div>
                                 </div>

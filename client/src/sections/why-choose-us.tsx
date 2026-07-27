@@ -86,7 +86,7 @@ export function WhyChooseUs() {
                         Our engineers and strategists work as an extension of your team — delivering fast, reliable, and future-proof digital solutions.
                     </motion.p>
                     
-                    <motion.div className="relative w-121.5 h-102.75 rounded-xl overflow-hidden shadow-sm bg-zinc-100 max-w-full" 
+                    <motion.div className="relative w-full max-w-121.5 h-64 sm:h-80 md:h-102.75 rounded-xl overflow-hidden shadow-sm bg-zinc-100" 
                         initial={{ y: 50, opacity: 0 }}
                         whileInView={{ y: 0, opacity: 1 }}
                         viewport={{ once: true }}

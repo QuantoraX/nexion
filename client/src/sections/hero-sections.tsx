@@ -1,5 +1,6 @@
 import { CodeIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export function HeroSection() {
     return (
@@ -43,10 +44,11 @@ export function HeroSection() {
                 viewport={{ once: true }}
                 transition={{ type: "spring", stiffness: 320, damping: 70, mass: 1 }}
             >
-                <button className="bg-zinc-50 hover:bg-zinc-200 px-6 py-2.5 rounded-md text-zinc-800 text-sm font-medium cursor-pointer transition">
+                <Link to="/services" className="bg-zinc-50 hover:bg-zinc-200 px-6 py-2.5 rounded-md text-zinc-800 text-sm font-medium cursor-pointer transition">
                     Our Services
-                </button>
-                <button className="border border-slate-200 text-zinc-50 px-5 py-2.5 rounded-md text-sm font-medium cursor-pointer transition group">
+                </Link>
+
+                <Link to="/contact" className="border border-slate-200 text-zinc-50 px-5 py-2.5 rounded-md text-sm font-medium cursor-pointer transition group">
                     <div className="relative overflow-hidden">
                         <span className="block transition-transform duration-200 group-hover:-translate-y-full">
                             Talk to an Expert
@@ -55,7 +57,7 @@ export function HeroSection() {
                             Talk to an Expert
                         </span>
                     </div>
-                </button>
+                </Link>
             </motion.div>
         </motion.section>
     )

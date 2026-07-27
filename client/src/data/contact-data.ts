@@ -33,8 +33,14 @@ export const contactInfo = [
     {
         icon: "phone",
         label: "Call or WhatsApp",
-        value: "+94 77 000 0000",
-        href: "https://wa.me/9477000000",
+        value: "+94 76 287 1658",
+        href: "https://wa.me/94762871658",
+    },
+    {
+        icon: "facebook",
+        label: "Facebook Page",
+        value: "Nexion Solutions Facebook",
+        href: "https://www.facebook.com/share/18yzBJKpxg/?mibextid=wwXIfr",
     },
     {
         icon: "location",
